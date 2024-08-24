@@ -16,21 +16,18 @@ import lombok.Data;
 @Entity
 @Data
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
-    private String email;
-    @Column
-    private String name;
-    @Column
-    private String surname;
+    private String username;
 
+    @Column
+    private String password;
+
+    // Relación con la entidad `UserRole`
     @OneToMany(mappedBy = "user")
-    private List<Order> orders;
-
-    @ManyToMany
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles;
+    private List<UserRole> userRoles;
 }

@@ -7,22 +7,22 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import lombok.Data;
+import lombok.Data; 
 
 @Data
 @Entity
-public class Product {
+public class Facture {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
-    private String description;
+    private String factureDate;
 
-    @Column
-    private Double price;
-
+    // Relación con la entidad `Order`
     @OneToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private Category category;
+    @JoinColumn(name = "order_id")
+    private Order order;
 }
+

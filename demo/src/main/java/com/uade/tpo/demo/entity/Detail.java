@@ -6,23 +6,28 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
+// Entidad `Detail` para el manejo de detalles de una orden
 @Data
 @Entity
-public class Product {
+public class Detail {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
-    private String description;
+    private Integer quantity;
 
-    @Column
-    private Double price;
+    // Relación con la entidad `Order`
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 
-    @OneToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private Category category;
+    // Relación con la entidad `Product`
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 }
