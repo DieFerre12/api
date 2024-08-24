@@ -22,6 +22,9 @@ public class Client {
     private String name;
 
     @Column
+    private String fechaNacimeinto;
+
+    @Column
     private String email;
 
     @Column
