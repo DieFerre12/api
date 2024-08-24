@@ -18,6 +18,24 @@ public class Product {
 
     @Column
     private String description;
+    
+    @Column
+    private String model;
+    
+    @Column
+    private String genre;
+    
+    @Column
+    private String brand;
+
+    @Column
+    private String color;
+    
+    @Column
+    private String size;
+
+    @Column
+    private Integer stock;
 
     @Column
     private Double price;
