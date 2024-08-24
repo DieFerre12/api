@@ -2,6 +2,8 @@ package com.uade.tpo.demo.entity;
 
 import java.util.List;
 
+import org.apache.catalina.User;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,9 +21,6 @@ public class Role {
     @Column
     private String description;
 
-    @ManyToMany(mappedBy = "roles")
-    private List<User> users;
-
-    // @OneToOne
-    // private User user;
+     @OneToOne
+    private User user;
 }
