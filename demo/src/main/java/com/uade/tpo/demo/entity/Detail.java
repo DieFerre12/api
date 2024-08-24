@@ -22,14 +22,12 @@ public class Detail {
     private Long id_order;
     @Column
     private Long id_product;
-
     @Column
     private Integer quantity;
     @Column
     private Double price;
     @Column
     private int amount;
-
 
     // Relación con la entidad `Order`
     @ManyToOne
