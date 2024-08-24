@@ -18,7 +18,25 @@ public class Facture {
     private Long id;
 
     @Column
+    private long id_client;
+
+    @Column
     private String factureDate;
+
+    @Column
+    private int num_payment;
+
+    @Column
+    private String detail;
+    
+    @Column
+    private int discount;
+
+    @Column
+    private int total;
+
+    @Column
+    private String payment;
 
     // Relación con la entidad `Order`
     @OneToOne
