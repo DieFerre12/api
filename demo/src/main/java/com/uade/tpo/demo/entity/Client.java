@@ -33,5 +33,9 @@ public class Client {
     // Relación con la entidad `Orders`
     @OneToMany(mappedBy = "client")
     private List<Order> orders;
+
+    // Relación con la entidad `Facture`
+    @OneToMany(mappedBy = "client")
+    private List<Facture> factures;
 }
 

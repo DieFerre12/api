@@ -38,4 +38,9 @@ public class Detail {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    // Relación con la entidad `Facture`
+    @ManyToOne
+    @JoinColumn(name = "facture_id")
+    private Facture facture;
 }

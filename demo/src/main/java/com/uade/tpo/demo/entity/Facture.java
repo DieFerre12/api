@@ -42,5 +42,10 @@ public class Facture {
     @OneToOne
     @JoinColumn(name = "order_id")
     private Order order;
+
+    // Relación con la entidad `MetodoPago`
+    @OneToOne
+    @JoinColumn(name = "metodo_pago_id")
+    private MetodoPago metodoPago;
 }
 

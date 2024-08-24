@@ -17,5 +17,6 @@ public class MetodoPago {
 
     @Column
     private String type;
+
 }
 
