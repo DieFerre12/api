@@ -43,7 +43,7 @@ public class CategoriesController {
         Optional<Category> result = categoryService.getCategoryById(categoryId);
         if (result.isPresent())
             return ResponseEntity.ok(result.get());
-
+        //aaaaaaa
         return ResponseEntity.noContent().build();
     }
 
