@@ -18,6 +18,6 @@ public class Role {
     @Column
     private String description;
 
-     @OneToOne
-    private User user;
+    /* @OneToOne*/ 
+   // private User user;
 }

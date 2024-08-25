@@ -6,8 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
-import lombok.Data; 
+import lombok.Data;
 
 @Data
 @Entity
@@ -28,7 +29,7 @@ public class Facture {
 
     @Column
     private String detail;
-    
+
     @Column
     private int discount;
 
@@ -47,5 +48,9 @@ public class Facture {
     @OneToOne
     @JoinColumn(name = "metodo_pago_id")
     private MetodoPago metodoPago;
-}
 
+    // Relación con la entidad `Client`
+    @ManyToOne
+    @JoinColumn(name = "client_id") // Este es el nombre de la columna en la tabla `Facture`
+    private Client client;
+}
