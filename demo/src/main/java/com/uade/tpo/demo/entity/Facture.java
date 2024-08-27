@@ -52,5 +52,5 @@ public class Facture {
     // Relación con la entidad `Client`
     @ManyToOne
     @JoinColumn(name = "client_id") // Este es el nombre de la columna en la tabla `Facture`
-    private Client client;
+    private User client;
 }

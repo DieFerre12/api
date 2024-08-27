@@ -29,8 +29,8 @@ public class Order  {
 
     // Relación con la entidad `Client`
     @ManyToOne
-    @JoinColumn(name = "client_id")
-    private Client client;
+    @JoinColumn(name = "user_id")
+    private User client;
 
     // Relación con la entidad `Facture`
     @OneToOne(mappedBy = "order")
