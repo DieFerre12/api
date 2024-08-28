@@ -46,7 +46,7 @@ public class Facture {
 
     // Relación con la entidad `MetodoPago`
     @OneToOne
-    @JoinColumn(name = "metodo_pago_id")
+    @JoinColumn(name = "metodo_pago_id", referencedColumnName = "id")
     private MetodoPago metodoPago;
 
     // Relación con la entidad `Client`
