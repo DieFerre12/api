@@ -31,16 +31,16 @@ public class Detail {
 
     // Relación con la entidad `Order`
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
     // Relación con la entidad `Product`
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
     // Relación con la entidad `Facture`
     @ManyToOne
-    @JoinColumn(name = "facture_id")
+    @JoinColumn(name = "facture_id", referencedColumnName = "id")
     private Facture facture;
 }
