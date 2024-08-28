@@ -23,14 +23,14 @@ public class Order  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     @Column
     private String orderDate;
 
     // Relación con la entidad `Client`
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User client;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     // Relación con la entidad `Facture`
     @OneToOne(mappedBy = "order")

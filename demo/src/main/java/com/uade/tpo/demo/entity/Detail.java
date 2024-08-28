@@ -1,5 +1,7 @@
 package com.uade.tpo.demo.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +30,8 @@ public class Detail {
     private Double price;
     @Column
     private int amount;
+
+
 
     // Relación con la entidad `Order`
     @ManyToOne

@@ -41,7 +41,7 @@ public class Facture {
 
     // Relación con la entidad `Order`
     @OneToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
     // Relación con la entidad `MetodoPago`
@@ -51,6 +51,6 @@ public class Facture {
 
     // Relación con la entidad `Client`
     @ManyToOne
-    @JoinColumn(name = "client_id") // Este es el nombre de la columna en la tabla `Facture`
-    private User client;
+    @JoinColumn(name = "user_id", referencedColumnName = "id") 
+    private User user;
 }
