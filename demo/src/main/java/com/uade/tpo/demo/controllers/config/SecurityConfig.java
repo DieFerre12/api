@@ -26,15 +26,17 @@ public class SecurityConfig {
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
-                                .csrf(AbstractHttpConfigurer::disable)
-                                .authorizeHttpRequests(req -> req.requestMatchers("/api/v1/auth/**")
-                                                .permitAll()
-                                                .anyRequest()
-                                                .authenticated())
-                                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
-                                .authenticationProvider(authenticationProvider)
-                                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
-                return http.build();
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(req -> req
+                    .requestMatchers("/api/v1/auth/**").permitAll() // Permitir acceso a todas las rutas de autenticación
+                    .requestMatchers("/admin/**").hasRole("ADMIN") // Rutas que solo pueden ser accesibles por ADMIN
+                    .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN") // Rutas accesibles por USER o ADMIN
+                    .anyRequest().authenticated()) // Cualquier otra ruta requiere autenticación
+                // Configurar la gestión de sesiones fuera del bloque authorizeHttpRequests
+                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+    
+            return http.build();
         }
 }
