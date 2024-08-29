@@ -16,7 +16,7 @@ public class Detail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_facture;
+    private Long id;
 
     @Column
     private Long id_order;
