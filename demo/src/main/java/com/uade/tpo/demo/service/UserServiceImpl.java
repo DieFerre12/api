@@ -3,9 +3,12 @@ package com.uade.tpo.demo.service;
 import com.uade.tpo.demo.entity.User;
 import com.uade.tpo.demo.repository.UserRepository;
 import com.uade.tpo.demo.service.UserService;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,10 +17,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Override
-    public User saveUser(User user) {
-        return userRepository.save(user);
-    }
 
     @Override
     public Optional<User> getUserById(Long userId) {
@@ -46,4 +45,10 @@ public class UserServiceImpl implements UserService {
             return userRepository.save(user);
         }).orElseThrow(() -> new RuntimeException("User not found"));
     }
+
+	@Override
+	public User saveUser(String email, String name, String password, String firstName, String id) {
+		List <User> users = userRepository.findAll();
+		return null;
+	}
 }
