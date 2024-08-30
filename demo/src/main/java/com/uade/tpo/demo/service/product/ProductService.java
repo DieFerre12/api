@@ -19,6 +19,8 @@ public interface ProductService {
     
     public Product updateProduct(Long productId, Product productDetails);
     
-    public Product saveProduct(String name, String description, String price, String stock);
+    public Object updateProduct(Long productId, String name, String description, String price, String stock);
+
+    public Product createProduct(String genre, String description, Double price, Integer stock);
 
 }

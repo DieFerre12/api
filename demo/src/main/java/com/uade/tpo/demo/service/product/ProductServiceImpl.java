@@ -42,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product saveProduct(String name, String description, String price, String stock) {
+    public Product createProduct(String name, String description, Double price, Integer stock) {
         Optional <Product> products = productRepository.findByName(name);
         if (products.isEmpty())
             return productRepository.save(new Product());
@@ -52,6 +52,17 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<Product> getProducts(PageRequest pageRequest) {
         return productRepository.findAll(pageRequest);
+    }
+
+    @Override
+    public Product updateProduct(Long productId, String genre, String description, String price, String stock) {
+        return productRepository.findById(productId).map(product -> {
+            product.setGenre(product.getGenre());
+            product.setDescription(product.getDescription());
+            product.setPrice(product.getPrice());
+            product.setStock(product.getStock());
+            return productRepository.save(product);
+        }).orElseThrow(() -> new RuntimeException("Producto no encontrado "));
     }
     
 }

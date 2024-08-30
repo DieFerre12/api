@@ -16,6 +16,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @PostMapping
     public ResponseEntity<User> createUser(@RequestBody UserRequest userRequest) {
         User newUser = userService.saveUser(userRequest.getEmail(), userRequest.getName(), userRequest.getPassword(), userRequest.getFirstName(), userRequest.getLastName());
         return ResponseEntity.ok(newUser);}

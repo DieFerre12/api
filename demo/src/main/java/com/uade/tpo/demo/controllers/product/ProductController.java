@@ -1,11 +1,14 @@
 package com.uade.tpo.demo.controllers.product;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,20 +37,24 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping public ResponseEntity<Product> saveProduct(
-            @RequestParam String name,
-            @RequestParam String description,
-            @RequestParam String price,
-            @RequestParam String stock) {
-        return ResponseEntity.ok(productService.saveProduct(name, description, price, stock));
+    @PostMapping public ResponseEntity<Product> createProduct(@RequestBody ProductRequest productRequest) {
+        Product product = productService.createProduct(productRequest.getGenre(), 
+            productRequest.getDescription(), productRequest.getPrice(), productRequest.getStock());
+        return ResponseEntity.created(URI.create("/products/" + product.getId())).body(product);
     }
 
-    @PostMapping public ResponseEntity<Product> updateProduct(
+    @GetMapping public ResponseEntity<Product> deleteProduct(@RequestParam Long productId) {
+        productService.deleteProduct(productId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping public ResponseEntity<Object> updateProduct(
             @RequestParam Long productId,
             @RequestParam String name,
             @RequestParam String description,
             @RequestParam String price,
             @RequestParam String stock) {
-        return null; } // a revisar por los metodos faltantes.
+        return ResponseEntity.ok(productService.updateProduct(productId, name, description, price, stock));
+    }
 
 }
