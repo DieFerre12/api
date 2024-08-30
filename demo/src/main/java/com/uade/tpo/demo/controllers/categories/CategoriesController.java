@@ -44,7 +44,6 @@ public class CategoriesController {
 
         return ResponseEntity.noContent().build();
     }
-
     @PostMapping
     public ResponseEntity<Object> createCategory(@RequestBody CategoryRequest categoryRequest)
             throws CategoryDuplicateException {
