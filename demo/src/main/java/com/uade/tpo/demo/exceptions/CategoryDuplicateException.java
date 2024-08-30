@@ -7,3 +7,4 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class CategoryDuplicateException extends Exception {
 
 }
+

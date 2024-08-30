@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import com.uade.tpo.demo.entity.Product;
+import com.uade.tpo.demo.exceptions.InsufficientStockException;
 import com.uade.tpo.demo.repository.ProductRepository;
 
 public class ProductServiceImpl implements ProductService {
@@ -57,6 +58,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product updateProduct(Long productId, String genre, String description, String price, String stock) {
         return productRepository.findById(productId).map(product -> {
+            if (stock < 0) {
+                throw new InsufficientStockException("El stock no puede ser negativo."); //ultimo agregado
+            }
             product.setGenre(product.getGenre());
             product.setDescription(product.getDescription());
             product.setPrice(product.getPrice());
