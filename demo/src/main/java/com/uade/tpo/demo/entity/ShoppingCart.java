@@ -1,17 +1,12 @@
 package com.uade.tpo.demo.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -23,22 +18,18 @@ public class ShoppingCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column
-    private Long id_user;
-    @Column
-    private Long id_product;
-    @Column
-    private Integer quantity;
-    @Column
-    private Double price;
-    @Column
-    private int amount;
 
-    @OneToMany
-    @JoinColumn(name = "id_product", referencedColumnName = "id")
-    private Product product;
+    @Column(name = "id_user")
+    private Long userId;
 
-    @OneToOne 
-    @JoinColumn(name = "id_user", referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id")
+    private List<Product> products;
+
+    @Column
+    private Double totalPrice;
+
+    @OneToOne
+    @JoinColumn(name = "id_user", referencedColumnName = "id", insertable = false, updatable = false)
     private User user;
 }

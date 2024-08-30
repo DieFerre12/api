@@ -55,4 +55,9 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id")
     private ShoppingCart shoppingCart;
+
+    public void addProductToCart(Product product) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addProductToCart'");
+    }
 }
