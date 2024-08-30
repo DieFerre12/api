@@ -1,4 +1,4 @@
-package com.uade.tpo.demo.service;
+package com.uade.tpo.demo.service.user;
 
 import com.uade.tpo.demo.entity.User;
 import java.util.Optional;

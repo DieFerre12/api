@@ -1,7 +1,8 @@
 package com.uade.tpo.demo.controllers.user;
 
 import com.uade.tpo.demo.entity.User;
-import com.uade.tpo.demo.service.UserService;
+import com.uade.tpo.demo.service.user.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

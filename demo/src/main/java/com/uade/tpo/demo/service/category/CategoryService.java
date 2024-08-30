@@ -1,5 +1,5 @@
 
-package com.uade.tpo.demo.service;
+package com.uade.tpo.demo.service.category;
 
 import java.util.Optional;
 

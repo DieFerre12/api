@@ -1,10 +1,7 @@
-package com.uade.tpo.demo.service;
+package com.uade.tpo.demo.service.user;
 
 import com.uade.tpo.demo.entity.User;
 import com.uade.tpo.demo.repository.UserRepository;
-import com.uade.tpo.demo.service.UserService;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
