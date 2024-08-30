@@ -35,6 +35,6 @@ public class ShoppingCart {
     private int amount;
 
     @OneToMany
-    @JoinColumn(name = "pruductId", referencedColumnName = "id")
+    @JoinColumn(name = "id_product", referencedColumnName = "id")
     private Product product;
 }

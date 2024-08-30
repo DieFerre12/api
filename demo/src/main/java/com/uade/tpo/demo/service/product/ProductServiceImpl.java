@@ -3,6 +3,8 @@ package com.uade.tpo.demo.service.product;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.repository.ProductRepository;
@@ -45,6 +47,11 @@ public class ProductServiceImpl implements ProductService {
         if (products.isEmpty())
             return productRepository.save(new Product());
         throw new RuntimeException("Product already exists");
+    }
+
+    @Override
+    public Page<Product> getProducts(PageRequest pageRequest) {
+        return productRepository.findAll(pageRequest);
     }
     
 }
