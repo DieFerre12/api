@@ -8,6 +8,8 @@ import org.springframework.data.domain.PageRequest;
 
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.exceptions.InsufficientStockException;
+import com.uade.tpo.demo.exceptions.InvalidPriceException;
+import com.uade.tpo.demo.exceptions.InvalidProductDataException;
 import com.uade.tpo.demo.repository.ProductRepository;
 
 public class ProductServiceImpl implements ProductService {
@@ -32,22 +34,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product updateProduct(Long productId, Product productDetails) {
-        return productRepository.findById(productId).map(product -> {
-            product.setGenre(productDetails.getGenre());
-            product.setDescription(productDetails.getDescription());
-            product.setPrice(productDetails.getPrice());
-            product.setStock(productDetails.getStock());
-            return productRepository.save(product);
-        }).orElseThrow(() -> new RuntimeException("Product not found"));    
-    }
-
-    @Override
-    public Product createProduct(String name, String description, Double price, Integer stock) {
+    public Product createProduct(String name, String description, Double price, Integer stock) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
+        if (name == null || name.isEmpty() || description == null || description.isEmpty()) {
+            throw new InvalidProductDataException();
+        }
+        if (price <= 10000) {
+            throw new InvalidPriceException();
+        }
+        if (stock < 0) {
+            throw new InsufficientStockException();
+        }
         Optional <Product> products = productRepository.findByName(name);
-        if (products.isEmpty())
+        if (products.isEmpty()){
             return productRepository.save(new Product());
-        throw new RuntimeException("Product already exists");
+        }
+        throw new RuntimeException("El Producto ya existe");
     }
 
     @Override
@@ -56,17 +57,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product updateProduct(Long productId, String genre, String description, String price, String stock) {
-        return productRepository.findById(productId).map(product -> {
-            if (stock < 0) {
-                throw new InsufficientStockException("El stock no puede ser negativo."); //ultimo agregado
+    public Product updateProduct(Long productId, String genre, String description, Double price, Integer stock) throws InvalidPriceException, InsufficientStockException {
+            if (price <= 10000) {
+                throw new InvalidPriceException();
             }
-            product.setGenre(product.getGenre());
-            product.setDescription(product.getDescription());
-            product.setPrice(product.getPrice());
-            product.setStock(product.getStock());
+            if (stock < 0) {
+                throw new InsufficientStockException(); 
+            }
+            return productRepository.findById(productId).map(product -> {
+            product.setGenre(genre);
+            product.setDescription(description);
+            product.setPrice(price);
+            product.setStock(stock);
             return productRepository.save(product);
         }).orElseThrow(() -> new RuntimeException("Producto no encontrado "));
     }
+
     
 }

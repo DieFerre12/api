@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.demo.entity.Product;
+import com.uade.tpo.demo.exceptions.InsufficientStockException;
+import com.uade.tpo.demo.exceptions.InvalidPriceException;
 import com.uade.tpo.demo.service.product.ProductService;
 
 @RestController
@@ -37,12 +39,6 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping public ResponseEntity<Product> createProduct(@RequestBody ProductRequest productRequest) {
-        Product product = productService.createProduct(productRequest.getGenre(), 
-            productRequest.getDescription(), productRequest.getPrice(), productRequest.getStock());
-        return ResponseEntity.created(URI.create("/products/" + product.getId())).body(product);
-    }
-
     @GetMapping public ResponseEntity<Product> deleteProduct(@RequestParam Long productId) {
         productService.deleteProduct(productId);
         return ResponseEntity.ok().build();
@@ -52,8 +48,8 @@ public class ProductController {
             @RequestParam Long productId,
             @RequestParam String name,
             @RequestParam String description,
-            @RequestParam String price,
-            @RequestParam String stock) {
+            @RequestParam Double price,
+            @RequestParam Integer stock) throws InvalidPriceException, InsufficientStockException {
         return ResponseEntity.ok(productService.updateProduct(productId, name, description, price, stock));
     }
 

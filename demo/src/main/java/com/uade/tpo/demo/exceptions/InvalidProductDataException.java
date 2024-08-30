@@ -9,4 +9,5 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "Los datos del artículo son inválidos o incompletos")
 public class InvalidProductDataException extends Exception {
 
+
 }
