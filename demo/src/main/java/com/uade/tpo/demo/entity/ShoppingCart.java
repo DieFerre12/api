@@ -7,24 +7,24 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@Data
 @Entity
-public class Detail {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class ShoppingCart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column
-    private Long id_order;
+    private Long id_user;
     @Column
     private Long id_product;
     @Column
@@ -34,20 +34,7 @@ public class Detail {
     @Column
     private int amount;
 
-
-
-    // Relación con la entidad `Order`
-    @ManyToOne
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
-    private Order order;
-
-    // Relación con la entidad `Product`
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @OneToMany
+    @JoinColumn(name = "pruductId", referencedColumnName = "id")
     private Product product;
-
-    // Relación con la entidad `Facture`
-    @ManyToOne
-    @JoinColumn(name = "facture_id", referencedColumnName = "id")
-    private Facture facture;
 }
