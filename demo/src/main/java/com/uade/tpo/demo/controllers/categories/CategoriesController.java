@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.demo.entity.Category;
 import com.uade.tpo.demo.exceptions.CategoryDuplicateException;
-import com.uade.tpo.demo.service.category.CategoryService;
-
+import com.uade.tpo.demo.service.CategoryService;
 import java.net.URI;
 import java.util.Optional;
 

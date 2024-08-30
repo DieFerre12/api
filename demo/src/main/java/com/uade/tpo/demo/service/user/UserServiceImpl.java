@@ -44,8 +44,10 @@ public class UserServiceImpl implements UserService {
     }
 
 	@Override
-	public User saveUser(String email, String name, String password, String firstName, String id) {
-		List <User> users = userRepository.findAll();
-		return null;
+	public User saveUser(String email, String name, String password, String firstName, String userId) {
+		Optional<User> users = userRepository.findByEmail(email);
+        if (users.isEmpty())
+            return userRepository.save(new User());
+        throw new RuntimeException("User already exists");
 	}
 }

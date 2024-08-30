@@ -9,6 +9,5 @@ import com.uade.tpo.demo.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findById(Long id);
     Optional<User> findByEmail(String mail);
 }

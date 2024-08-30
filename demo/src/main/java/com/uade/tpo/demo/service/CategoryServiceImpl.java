@@ -1,4 +1,4 @@
-package com.uade.tpo.demo.service.category;
+package com.uade.tpo.demo.service;
 
 import java.util.List;
 import java.util.Optional;
