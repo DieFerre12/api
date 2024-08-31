@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -67,4 +68,21 @@ public class SecurityConfig {
             return new BCryptPasswordEncoder();
         }
 
+        @Bean
+        public AuthenticationProvider authenticationProvider() {
+            DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+                authenticationProvider.setUserDetailsService(userDetailsService());
+                authenticationProvider.setPasswordEncoder(passwordEncoder());
+                return authenticationProvider;
+        }
+
+        public AuthenticationManager authenticationManager() throws Exception {
+            return new AuthenticationManager() {
+                @Override
+                public org.springframework.security.core.Authentication authenticate(org.springframework.security.core.Authentication authentication) {
+                    return authenticationProvider().authenticate(authentication);
+                }
+            };
+            
+        }       
 }
