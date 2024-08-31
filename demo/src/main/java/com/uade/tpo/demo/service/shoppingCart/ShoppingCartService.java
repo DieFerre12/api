@@ -8,19 +8,21 @@ import java.util.Optional;
 
 public interface ShoppingCartService {
 
-    List<ShoppingCart> getAllCarts();
 
-    Optional<ShoppingCart> getCartByUserId(Long userId);
 
-    ShoppingCart addOrUpdateCart(ShoppingCart shoppingCart);
+   public List<ShoppingCart> getAllCarts();
 
-    ShoppingCart addProductToCart(Long userId, Product product);
+   public Optional<ShoppingCart> getCartByUserId(Long userId);
 
-    ShoppingCart updateProductInCart(Long userId, Product product);
+   public ShoppingCart addProductToCart(Long userId, Product product);
 
-    void removeProductFromCart(Long userId, Long productId);
+   public ShoppingCart updateProductInCart(Long userId, Product product);
 
-    void clearCartByUserId(Long userId);
+   public void removeProductFromCart(Long userId, Long productId);
 
-    double calculateTotalPrice(Long userId);
+   public void clearCartByUserId(Long userId);
+
+   public double calculateTotalPrice(Long userId);
+
+    public ShoppingCart createCart(Long userId);
 }
