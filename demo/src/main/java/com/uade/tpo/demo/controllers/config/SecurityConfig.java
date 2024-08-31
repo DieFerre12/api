@@ -2,16 +2,19 @@ package com.uade.tpo.demo.controllers.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.context.SecurityContextHolder;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
-
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +31,8 @@ public class SecurityConfig {
                 http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
+                .anyRequest()
+                .authenticated()
                     .requestMatchers("/api/v1/auth/**").permitAll() // Permitir acceso a todas las rutas de autenticación
                     .requestMatchers("/admin/**").hasRole("ADMIN") // Rutas que solo pueden ser accesibles por ADMIN
                     .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN") // Rutas accesibles por USER o ADMIN
@@ -36,7 +41,30 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-    
             return http.build();
         }
+
+        @SuppressWarnings("deprecation")
+        @Bean
+        UserDetailsService userDetailsService() {
+            return new InMemoryUserDetailsManager(
+                User.withDefaultPasswordEncoder()
+                    .username("admin")
+                    .password(passwordEncoder().encode("admin"))
+                    .roles("ADMIN")
+                    .build(),
+                User.withDefaultPasswordEncoder()
+                    .username("user")
+                    .password("user")
+                    .roles("USER")
+                    .build()
+            );
+        }
+
+
+        @Bean
+        PasswordEncoder passwordEncoder() {
+            return new BCryptPasswordEncoder();
+        }
+
 }
