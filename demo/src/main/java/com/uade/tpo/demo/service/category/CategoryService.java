@@ -1,5 +1,5 @@
 
-package com.uade.tpo.demo.service;
+package com.uade.tpo.demo.service.category;
 
 import java.util.Optional;
 
@@ -13,6 +13,6 @@ public interface CategoryService {
     public Page<Category> getCategories(PageRequest pageRequest);
 
     public Optional<Category> getCategoryById(Long categoryId);
-    //aaaaaaa
+
     public Category createCategory(String description) throws CategoryDuplicateException;
 }

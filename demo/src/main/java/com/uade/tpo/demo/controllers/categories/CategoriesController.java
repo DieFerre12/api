@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.demo.entity.Category;
 import com.uade.tpo.demo.exceptions.CategoryDuplicateException;
-import com.uade.tpo.demo.service.CategoryService;
+import com.uade.tpo.demo.service.category.CategoryService;
+
 import java.net.URI;
 import java.util.Optional;
 
@@ -43,7 +44,6 @@ public class CategoriesController {
 
         return ResponseEntity.noContent().build();
     }
-
     @PostMapping
     public ResponseEntity<Object> createCategory(@RequestBody CategoryRequest categoryRequest)
             throws CategoryDuplicateException {
