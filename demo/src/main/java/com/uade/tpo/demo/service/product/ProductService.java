@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import com.uade.tpo.demo.entity.Category;
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.exceptions.InsufficientStockException;
 import com.uade.tpo.demo.exceptions.InvalidPriceException;
@@ -20,6 +21,6 @@ public interface ProductService {
     
     public Product updateProduct(Long id, String name, String description,String genre, Double price, Integer stock) throws InvalidPriceException, InsufficientStockException;
 
-    public Product createProduct(Long id, String name, String description,String genre, Double price, Integer stock) throws InvalidProductDataException,InvalidPriceException,InsufficientStockException;
+    public Product createProduct(Long id, String name, String description,String genre, Double price, Integer stock, Category category) throws InvalidProductDataException,InvalidPriceException,InsufficientStockException;
 
 }

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.uade.tpo.demo.entity.Category;
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.exceptions.InsufficientStockException;
 import com.uade.tpo.demo.exceptions.InvalidPriceException;
@@ -31,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product createProduct(Long id, String name, String description,String genre, Double price, Integer stock) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
+    public Product createProduct(Long id, String name, String description,String genre, Double price, Integer stock, Category category) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
         if (id == null || description == null || description.isEmpty()) {
             throw new InvalidProductDataException();
         }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.tpo.demo.entity.Category;
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.exceptions.InsufficientStockException;
 import com.uade.tpo.demo.exceptions.InvalidPriceException;
@@ -60,10 +61,11 @@ public class ProductController {
         @RequestParam String description,
         @RequestParam String genre,
         @RequestParam Double price,
-        @RequestParam Integer stock
+        @RequestParam Integer stock,
+        @RequestParam Category category
     ) {
         try {
-            Product newProduct = productService.createProduct(id, name, description, genre, price, stock);
+            Product newProduct = productService.createProduct(id, name, description, genre, price, stock, category);
             return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
         } catch (InvalidProductDataException e) {
             return new ResponseEntity<>("Invalid product data", HttpStatus.BAD_REQUEST);
