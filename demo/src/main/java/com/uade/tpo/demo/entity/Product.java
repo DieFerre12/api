@@ -1,7 +1,5 @@
 package com.uade.tpo.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -49,9 +47,6 @@ public class Product {
 
     @Column
     private Double price;
-
-    @Column 
-    private Long categoryId;
 
     @OneToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
