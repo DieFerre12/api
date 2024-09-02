@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uade.tpo.demo.entity.ShoppingCart;
+import com.uade.tpo.demo.entity.User;
 import com.uade.tpo.demo.entity.Category;
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.repository.ShoppingCartRepository;
@@ -76,17 +77,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-public ShoppingCart createCart(Long userId) {
-    Optional<ShoppingCart> existingCart = shoppingCartRepository.findByUserId(userId);
-    if (existingCart.isPresent()) {
-        return existingCart.get();
-    } else {
-        ShoppingCart newCart = ShoppingCart.builder()
-                .userId(userId)
-                .totalPrice(0.0)
-                .build();
-        return shoppingCartRepository.save(newCart);
+    public ShoppingCart createCart(Long userId) {
+        Optional<ShoppingCart> existingCart = shoppingCartRepository.findByUserId(userId);
+        if (existingCart.isPresent()) {
+            return existingCart.get();
+        } else {
+            User user = new User(); 
+            ShoppingCart newCart = ShoppingCart.builder()
+                    .user(user)
+                    .totalPrice(0.0)
+                    .build();
+            return shoppingCartRepository.save(newCart);
+        }
     }
-}
 
 }

@@ -9,7 +9,7 @@ import com.uade.tpo.demo.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByEmail(String mail);
-    Optional<User> findByUserId(Long userId);
-    void deleteByUserId(Long userId);
+    Optional<User> findByEmail(String email);
+    Optional<User> findById(Long id);  // Cambiado de findByUserId a findById
+    void deleteById(Long id);          // Cambiado de deleteByUserId a deleteById
 }

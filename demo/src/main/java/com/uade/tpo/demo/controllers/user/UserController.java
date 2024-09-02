@@ -2,7 +2,6 @@ package com.uade.tpo.demo.controllers.user;
 
 import com.uade.tpo.demo.entity.User;
 import com.uade.tpo.demo.service.user.UserService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +17,19 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody UserRequest userRequest) {
-        User newUser = userService.saveUser(userRequest.getEmail(), userRequest.getName(), userRequest.getPassword(), userRequest.getFirstName(), userRequest.getLastName());
-        return ResponseEntity.ok(newUser);}
+        User newUser = userService.saveUser(
+                userRequest.getEmail(), 
+                userRequest.getName(), 
+                userRequest.getPassword(), 
+                userRequest.getFirstName(), 
+                userRequest.getLastName()
+        );
+        return ResponseEntity.ok(newUser);
+    }
 
-
-    @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable Long userId) {
-        Optional<User> user = userService.getUserById(userId);
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        Optional<User> user = userService.getUserById(id);
         return user.map(ResponseEntity::ok)
                    .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -36,15 +41,15 @@ public class UserController {
                    .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
-        userService.deleteUser(userId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody User userDetails) {
-        User updatedUser = userService.updateUser(userId, userDetails);
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+        User updatedUser = userService.updateUser(id, userDetails);
         return ResponseEntity.ok(updatedUser);
     }
 }
