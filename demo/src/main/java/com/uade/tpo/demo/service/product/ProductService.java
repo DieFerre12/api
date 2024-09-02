@@ -20,7 +20,7 @@ public interface ProductService {
     
     public void deleteProduct(Long productId);
     
-    public Product updateProduct(Long productId, String name, String description, Double price, Integer stock) throws InvalidPriceException, InsufficientStockException;
+    public Product updateProduct(Long productId, String name, String description,String genre, Double price, Integer stock) throws InvalidPriceException, InsufficientStockException;
 
     public Product createProduct(String genre, String description, Double price, Integer stock) throws InvalidProductDataException,InvalidPriceException,InsufficientStockException;
 

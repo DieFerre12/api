@@ -57,7 +57,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product updateProduct(Long productId, String genre, String description, Double price, Integer stock) throws InvalidPriceException, InsufficientStockException {
+    public Product  updateProduct(Long productId, String name, String description,String genre, Double price, Integer stock) throws InvalidPriceException, InsufficientStockException {
             if (price <= 10000) {
                 throw new InvalidPriceException();
             }
