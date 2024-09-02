@@ -5,11 +5,13 @@ import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.exceptions.InsufficientStockException;
 import com.uade.tpo.demo.exceptions.InvalidPriceException;
+import com.uade.tpo.demo.exceptions.InvalidProductDataException;
 import com.uade.tpo.demo.service.product.ProductService;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -51,12 +54,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> updateProduct(
-            @RequestParam Long productId,
-            @RequestParam String name,
-            @RequestParam String description,
-            @RequestParam Double price,
-            @RequestParam Integer stock) throws InvalidPriceException, InsufficientStockException {
-        return ResponseEntity.ok(productService.updateProduct(productId, name, description, description, price, stock));
+    public ResponseEntity<Product> createProduct(@RequestParam Long id, String name, String description,String genre, Double price, Integer stock) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
+        return ResponseEntity.ok(productService.createProduct(id, name, description, genre, price, stock));
     }
 }

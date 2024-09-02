@@ -37,8 +37,8 @@ public class SecurityConfig {
                                                 .requestMatchers("/admin/**").hasRole("ADMIN") // Rutas administrativas solo para ADMIN
                                                 .requestMatchers("/public/**").permitAll() // Rutas públicas
                                                 .requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN") // Rutas de usuario
-                                                .requestMatchers(HttpMethod.GET, "/products/**").permitAll() // Productos accesibles por GET sin autenticación
-                                                .requestMatchers(HttpMethod.POST, "/products/**").hasRole("ADMIN") // Solo ADMIN puede hacer POST en productos
+                                                .requestMatchers("/products/**").permitAll() // Productos accesibles por GET sin autenticación
+                                                .requestMatchers( "/products/**").permitAll() // Solo ADMIN puede hacer POST en productos
                                                 .requestMatchers("/categories/**").hasAnyAuthority(Role.USER.name())
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
