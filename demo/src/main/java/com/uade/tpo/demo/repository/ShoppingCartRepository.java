@@ -12,5 +12,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 @Repository
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long> {
     Optional<ShoppingCart> findByUserId(Long userId);
-    Optional<ShoppingCart> findByUserIdAndStatus(Long userId, String status);
 }

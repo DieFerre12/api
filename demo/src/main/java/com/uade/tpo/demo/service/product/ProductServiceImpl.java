@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.exceptions.InsufficientStockException;
@@ -12,6 +13,7 @@ import com.uade.tpo.demo.exceptions.InvalidPriceException;
 import com.uade.tpo.demo.exceptions.InvalidProductDataException;
 import com.uade.tpo.demo.repository.ProductRepository;
 
+@Service
 public class ProductServiceImpl implements ProductService {
 
 
@@ -24,18 +26,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<Product> getProductByName(String name) {
-        return productRepository.findByName(name);
-    }
-
-    @Override
     public void deleteProduct(Long productId) {
         productRepository.deleteById(productId);
     }
 
     @Override
-    public Product createProduct(String name, String description, Double price, Integer stock) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
-        if (name == null || name.isEmpty() || description == null || description.isEmpty()) {
+    public Product createProduct(Long id, String name, String description,String genre, Double price, Integer stock) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
+        if (id == null || description == null || description.isEmpty()) {
             throw new InvalidProductDataException();
         }
         if (price <= 10000) {
@@ -44,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
         if (stock < 0) {
             throw new InsufficientStockException();
         }
-        Optional <Product> products = productRepository.findByName(name);
+        Optional <Product> products = productRepository.findById(id);
         if (products.isEmpty()){
             return productRepository.save(new Product());
         }

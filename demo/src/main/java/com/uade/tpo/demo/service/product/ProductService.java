@@ -15,13 +15,11 @@ public interface ProductService {
     public Page<Product> getProducts(PageRequest pageRequest);
 
     public Optional<Product> getProductById(Long productId);
-
-    public Optional<Product> getProductByName(String name);
     
     public void deleteProduct(Long productId);
     
-    public Product updateProduct(Long productId, String name, String description,String genre, Double price, Integer stock) throws InvalidPriceException, InsufficientStockException;
+    public Product updateProduct(Long id, String name, String description,String genre, Double price, Integer stock) throws InvalidPriceException, InsufficientStockException;
 
-    public Product createProduct(String genre, String description, Double price, Integer stock) throws InvalidProductDataException,InvalidPriceException,InsufficientStockException;
+    public Product createProduct(Long id, String name, String description,String genre, Double price, Integer stock) throws InvalidProductDataException,InvalidPriceException,InsufficientStockException;
 
 }
