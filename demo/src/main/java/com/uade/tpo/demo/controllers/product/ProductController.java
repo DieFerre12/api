@@ -54,7 +54,26 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestParam Long id, String name, String description,String genre, Double price, Integer stock) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
-        return ResponseEntity.ok(productService.createProduct(id, name, description, genre, price, stock));
+    public ResponseEntity<?> createProduct(
+        @RequestParam Long id,
+        @RequestParam String name,
+        @RequestParam String description,
+        @RequestParam String genre,
+        @RequestParam Double price,
+        @RequestParam Integer stock
+    ) {
+        try {
+            Product newProduct = productService.createProduct(id, name, description, genre, price, stock);
+            return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
+        } catch (InvalidProductDataException e) {
+            return new ResponseEntity<>("Invalid product data", HttpStatus.BAD_REQUEST);
+        } catch (InvalidPriceException e) {
+            return new ResponseEntity<>("Invalid price", HttpStatus.BAD_REQUEST);
+        } catch (InsufficientStockException e) {
+            return new ResponseEntity<>("Insufficient stock", HttpStatus.BAD_REQUEST);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
     }
+
 }
