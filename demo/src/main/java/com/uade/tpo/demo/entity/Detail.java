@@ -7,16 +7,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-// Entidad `Detail` para el manejo de detalles de una orden
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Data
 @Entity
 public class Detail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_facture;
+    private Long id;
 
     @Column
     private Long id_order;
