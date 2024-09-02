@@ -50,9 +50,11 @@ public class Product {
     @Column
     private Double price;
 
+    @Column 
+    private Long categoryId;
+
     @OneToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
-    @JsonBackReference
     private Category category;
 
     @ManyToOne
