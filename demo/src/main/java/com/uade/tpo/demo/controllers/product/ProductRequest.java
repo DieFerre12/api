@@ -10,7 +10,6 @@ public class ProductRequest {
     private String model;
     private String genre;
     private String brand;
-    private String color;
     private String size;
     private Integer stock;
     private Double price;

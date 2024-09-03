@@ -21,6 +21,6 @@ public interface ProductService {
     
     public Product updateProduct(Long id, String name, String description,String genre, Double price, Integer stock) throws InvalidPriceException, InsufficientStockException;
 
-    public Product createProduct(String description,String model,String genre,String brand, String color, String size, Double price, Integer stock, Category category) throws InvalidProductDataException,InvalidPriceException,InsufficientStockException;
+    public Product createProduct(String description, String model, String genre, String image, Double double1, Integer integer, Category category) throws InvalidProductDataException,InvalidPriceException,InsufficientStockException;
 
 }

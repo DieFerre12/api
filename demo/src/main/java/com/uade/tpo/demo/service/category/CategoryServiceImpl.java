@@ -25,11 +25,4 @@ public class CategoryServiceImpl implements CategoryService {
     public Optional<Category> getCategoryById(Long categoryId) {
         return categoryRepository.findById(categoryId);
     }
-
-    public Category createCategory(String description) throws CategoryDuplicateException {
-        List<Category> categories = categoryRepository.findByDescription(description);
-        if (categories.isEmpty())
-            return categoryRepository.save(new Category(description));
-        throw new CategoryDuplicateException();
-    }
 }

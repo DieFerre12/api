@@ -2,6 +2,8 @@ package com.uade.tpo.demo.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,22 +38,21 @@ public class Product {
     private String genre;
 
     @Column
-    private String brand;
-
-    @Column
-    private String color;
-
-    @Column
-    private String size;
-
-    @Column
     private Integer stock;
 
     @Column
     private Double price;
 
-    @OneToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @Column
+    private String image;
+
+    @Enumerated(EnumType.STRING)
+    private Brand brand;
+    
+    @Enumerated(EnumType.STRING)
+    private Size size;
+
+    @Enumerated(EnumType.STRING)
     private Category category;
 
     @ManyToMany
