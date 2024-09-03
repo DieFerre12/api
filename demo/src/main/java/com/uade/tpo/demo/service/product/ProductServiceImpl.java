@@ -69,8 +69,5 @@ public class ProductServiceImpl implements ProductService {
             product.setStock(stock);
             return productRepository.save(product);
         }).orElseThrow(() -> new RuntimeException("Producto no encontrado "));
-    }
-
-    
-    
+    }    
 }

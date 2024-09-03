@@ -2,6 +2,7 @@ package com.uade.tpo.demo.controllers.product;
 
 import java.net.URI;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,11 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.tpo.demo.controllers.categories.CategoryRequest;
 import com.uade.tpo.demo.entity.Category;
 import com.uade.tpo.demo.entity.Product;
+import com.uade.tpo.demo.exceptions.CategoryDuplicateException;
 import com.uade.tpo.demo.exceptions.InsufficientStockException;
 import com.uade.tpo.demo.exceptions.InvalidPriceException;
 import com.uade.tpo.demo.exceptions.InvalidProductDataException;
+import com.uade.tpo.demo.repository.ProductRepository;
 import com.uade.tpo.demo.service.product.ProductService;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -54,28 +58,13 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping
-    public ResponseEntity<?> createProduct(
-        @RequestParam Long id,
-        @RequestParam String name,
-        @RequestParam String description,
-        @RequestParam String genre,
-        @RequestParam Double price,
-        @RequestParam Integer stock,
-        @RequestParam Category category
-    ) {
-        try {
-            Product newProduct = productService.createProduct(id, name, description, genre, price, stock, category);
-            return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
-        } catch (InvalidProductDataException e) {
-            return new ResponseEntity<>("Invalid product data", HttpStatus.BAD_REQUEST);
-        } catch (InvalidPriceException e) {
-            return new ResponseEntity<>("Invalid price", HttpStatus.BAD_REQUEST);
-        } catch (InsufficientStockException e) {
-            return new ResponseEntity<>("Insufficient stock", HttpStatus.BAD_REQUEST);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-        }
+    @PostMapping 
+     public ResponseEntity<Object> createProduct(@RequestBody Product  ProductRequest)
+            throws CategoryDuplicateException, InvalidProductDataException, InvalidPriceException, InsufficientStockException {
+        Product result = productService.createProduct(ProductRequest.getId(), ProductRequest.getBrand(), ProductRequest.getDescription(),ProductRequest.getGenre(),ProductRequest.getPrice(),ProductRequest.getStock() , ProductRequest.getCategory());
+        return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
     }
-
 }
+
+
+
