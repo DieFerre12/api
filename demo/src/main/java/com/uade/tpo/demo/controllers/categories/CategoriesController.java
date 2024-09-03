@@ -5,10 +5,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.demo.entity.Category;
-import com.uade.tpo.demo.exceptions.CategoryDuplicateException;
+import com.uade.tpo.demo.entity.Category.CategoryType;
 import com.uade.tpo.demo.service.category.CategoryService;
 
-import java.net.URI;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +45,12 @@ public class CategoriesController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createCategory(@RequestBody CategoryRequest categoryRequest)
-            throws CategoryDuplicateException {
-        Category result = categoryService.createCategory(categoryRequest.getDescription());
-        return ResponseEntity.created(URI.create("/categories/" + result.getId())).body(result);
+    public ResponseEntity<Object> selectCategory(@RequestBody CategoryType categoryType) {
+        Optional<Category> result = categoryService.getCategoryByType(categoryType);
+        if (result.isPresent()) {
+            return ResponseEntity.ok(result.get());
+        } else {
+            return ResponseEntity.status(404).body("La categoría no existe");
+        }
     }
 }

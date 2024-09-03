@@ -1,6 +1,5 @@
 package com.uade.tpo.demo.service.category;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.uade.tpo.demo.entity.Category;
-import com.uade.tpo.demo.exceptions.CategoryDuplicateException;
+import com.uade.tpo.demo.entity.Category.CategoryType;
 import com.uade.tpo.demo.repository.CategoryRepository;
 
 @Service
@@ -18,18 +17,18 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Override
     public Page<Category> getCategories(PageRequest pageable) {
         return categoryRepository.findAll(pageable);
     }
 
+    @Override
     public Optional<Category> getCategoryById(Long categoryId) {
         return categoryRepository.findById(categoryId);
     }
 
-    public Category createCategory(String description) throws CategoryDuplicateException {
-        List<Category> categories = categoryRepository.findByDescription(description);
-        if (categories.isEmpty())
-            return categoryRepository.save(new Category());
-        throw new CategoryDuplicateException();
+    @Override
+    public Optional<Category> getCategoryByType(CategoryType categoryType) {
+        return categoryRepository.findByCategoryType(categoryType);  // Corregido para usar el nombre del método actualizado
     }
 }
