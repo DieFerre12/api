@@ -7,7 +7,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 
 @Data
@@ -29,7 +29,7 @@ public class Category {
     @Column
     private CategoryType categoryType;
 
-    @OneToOne(mappedBy = "category")
+    @OneToMany (mappedBy = "category")
     private Product product;
 
     public enum CategoryType {

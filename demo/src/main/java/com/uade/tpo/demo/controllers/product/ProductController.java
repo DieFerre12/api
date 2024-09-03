@@ -1,7 +1,6 @@
 package com.uade.tpo.demo.controllers.product;
 
 import java.net.URI;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,19 +13,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.uade.tpo.demo.entity.Product;
-import com.uade.tpo.demo.exceptions.CategoryDuplicateException;
+import com.uade.tpo.demo.entity.Brand;
+import com.uade.tpo.demo.entity.Size;
 import com.uade.tpo.demo.exceptions.InsufficientStockException;
 import com.uade.tpo.demo.exceptions.InvalidPriceException;
 import com.uade.tpo.demo.exceptions.InvalidProductDataException;
 import com.uade.tpo.demo.service.product.ProductService;
 
-
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    
+
     @Autowired 
     private ProductService productService;
 
@@ -51,22 +49,21 @@ public class ProductController {
         productService.deleteProduct(id);
         return ResponseEntity.ok().build();
     }
+
     @PostMapping 
-    public ResponseEntity<Object> createProduct(@RequestBody Product ProductRequest)
-            throws CategoryDuplicateException, InvalidProductDataException, InvalidPriceException, InsufficientStockException {
-        Product result = productService.createProduct( 
-                ProductRequest.getDescription(),
-                ProductRequest.getModel(),
-                ProductRequest.getGenre(),
-                ProductRequest.getImage(),
-                ProductRequest.getPrice(),
-                ProductRequest.getStock(),
-                ProductRequest.getCategory()
+    public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productRequest)
+            throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
+        Product result = productService.createProduct(
+            productRequest.getDescription(),
+            productRequest.getModel(),
+            productRequest.getGenre(),
+            productRequest.getImage(),
+            productRequest.getPrice(),
+            productRequest.getStock(),
+            productRequest.getCategory()
+            //productRequest.getBrand(),
+            //productRequest.getSize()
         );
         return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
     }
-    
 }
-
-
-

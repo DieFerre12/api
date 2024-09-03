@@ -2,15 +2,14 @@ package com.uade.tpo.demo.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,12 +37,6 @@ public class Product {
     private String genre;
 
     @Column
-    private Integer stock;
-
-    @Column
-    private Double price;
-
-    @Column
     private String image;
 
     @Enumerated(EnumType.STRING)
@@ -52,11 +45,21 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private Size size;
 
-    @Enumerated(EnumType.STRING)
+    @Column
+    private Integer stock;
+
+    @Column
+    private Double price;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")  // Asegúrate de que "category_id" coincida con el nombre de la columna en la base de datos
     private Category category;
 
     @ManyToMany
     @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id")
     private ShoppingCart shoppingCart;
+
+    
+
 }
 
