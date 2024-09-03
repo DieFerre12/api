@@ -19,15 +19,14 @@ public class ShoppingCart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id")
+    @ManyToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL)
     private List<Product> products;
 
     @Column
     private Double totalPrice;
 
-    // Relación con la entidad User usando una clave foránea (id_user)
     @ManyToOne
     @JoinColumn(name = "id_user", referencedColumnName = "id")
     private User user;
 }
+

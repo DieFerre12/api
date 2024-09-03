@@ -32,24 +32,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product createProduct(Long id, String name, String description,String genre, Double price, Integer stock, Category category) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
-        if (id == null || description == null || description.isEmpty()) {
-            throw new InvalidProductDataException();
-        }
-        if (price <= 10000) {
-            throw new InvalidPriceException();
-        }
-        if (stock < 0) {
-            throw new InsufficientStockException();
-        }
-        Optional <Product> products = productRepository.findById(id);
-        if (products.isEmpty()){
-            return productRepository.save(new Product());
-        }
-        throw new RuntimeException("El Producto ya existe");
-    }
-
-    @Override
     public Page<Product> getProducts(PageRequest pageRequest) {
         return productRepository.findAll(pageRequest);
     }
@@ -69,5 +51,32 @@ public class ProductServiceImpl implements ProductService {
             product.setStock(stock);
             return productRepository.save(product);
         }).orElseThrow(() -> new RuntimeException("Producto no encontrado "));
+    }
+
+    @Override
+    public Product createProduct(String description, String model, String genre, String brand, String color,
+            String size, Double price, Integer stock, Category category)
+            throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
+                if (description == null || description.isEmpty()) {
+                    throw new InvalidProductDataException();
+                }
+                if (price <= 10000) {
+                    throw new InvalidPriceException();
+                }
+                if (stock < 0) {
+                    throw new InsufficientStockException();
+                }
+                Product product = Product.builder()
+                        .description(description)
+                        .model(model)
+                        .genre(genre)
+                        .brand(brand)
+                        .color(color)
+                        .size(size)
+                        .price(price)
+                        .stock(stock)
+                        .category(category)
+                        .build();
+                return productRepository.save(product);
+            }
     }    
-}

@@ -38,13 +38,11 @@ public class SecurityConfig {
                                                 .requestMatchers("/public/**").permitAll() // Rutas públicas
                                                 .requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN") // Rutas de usuario
                                                 .requestMatchers("/products/**").permitAll() // Productos accesibles por GET sin autenticación
-                                                .requestMatchers( "/products/**").permitAll() // Solo ADMIN puede hacer POST en productos
                                                 .requestMatchers("/categories/**").hasAnyAuthority(Role.USER.name())
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                                 .authenticationProvider(authenticationProvider)
                                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
                 return http.build();
         }
 }

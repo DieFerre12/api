@@ -17,16 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.uade.tpo.demo.controllers.categories.CategoryRequest;
-import com.uade.tpo.demo.entity.Category;
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.exceptions.CategoryDuplicateException;
 import com.uade.tpo.demo.exceptions.InsufficientStockException;
 import com.uade.tpo.demo.exceptions.InvalidPriceException;
 import com.uade.tpo.demo.exceptions.InvalidProductDataException;
-import com.uade.tpo.demo.repository.ProductRepository;
 import com.uade.tpo.demo.service.product.ProductService;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -57,13 +53,23 @@ public class ProductController {
         productService.deleteProduct(id);
         return ResponseEntity.ok().build();
     }
-
     @PostMapping 
-     public ResponseEntity<Object> createProduct(@RequestBody Product  ProductRequest)
+    public ResponseEntity<Object> createProduct(@RequestBody Product ProductRequest)
             throws CategoryDuplicateException, InvalidProductDataException, InvalidPriceException, InsufficientStockException {
-        Product result = productService.createProduct(ProductRequest.getId(), ProductRequest.getBrand(), ProductRequest.getDescription(),ProductRequest.getGenre(),ProductRequest.getPrice(),ProductRequest.getStock() , ProductRequest.getCategory());
+        Product result = productService.createProduct( 
+                ProductRequest.getDescription(),
+                ProductRequest.getModel(),
+                ProductRequest.getGenre(),
+                ProductRequest.getBrand(),
+                ProductRequest.getColor(),
+                ProductRequest.getSize(),
+                ProductRequest.getPrice(),
+                ProductRequest.getStock(),
+                ProductRequest.getCategory()
+        );
         return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
     }
+    
 }
 
 

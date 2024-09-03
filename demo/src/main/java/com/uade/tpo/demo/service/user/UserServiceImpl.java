@@ -32,7 +32,6 @@ public class UserServiceImpl implements UserService {
     public User updateUser(Long id, User userDetails) {
         return userRepository.findById(id).map(user -> {
             user.setEmail(userDetails.getEmail());
-            user.setName(userDetails.getName());
             user.setFirstName(userDetails.getFirstName());
             user.setLastName(userDetails.getLastName());
             user.setPassword(userDetails.getPassword());
@@ -47,7 +46,6 @@ public class UserServiceImpl implements UserService {
         if (users.isEmpty()) {
             User newUser = User.builder()
                     .email(email)
-                    .name(name)
                     .password(password)
                     .firstName(firstName)
                     .lastName(lastName)
