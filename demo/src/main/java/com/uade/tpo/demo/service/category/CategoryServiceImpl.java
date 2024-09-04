@@ -33,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Optional<Category> createCategory(String name, CategoryType categoryType) {
+    public Optional<Category> createCategory(CategoryType categoryType) {
         Category category = new Category();
         category.setCategoryType(categoryType);
         return Optional.of(categoryRepository.save(category));

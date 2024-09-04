@@ -54,7 +54,7 @@ public class Product {
     private Double price;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")  // Asegúrate de que "category_id" coincida con el nombre de la columna en la base de datos
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @ManyToMany
@@ -63,6 +63,6 @@ public class Product {
         joinColumns = @JoinColumn(name = "product_id"),
         inverseJoinColumns = @JoinColumn(name = "shopping_cart_id")
     )
-    private List<ShoppingCart> shoppingCarts;  // Cambiado a List<ShoppingCart>
+    private List<ShoppingCart> shoppingCarts;  
 
 }
