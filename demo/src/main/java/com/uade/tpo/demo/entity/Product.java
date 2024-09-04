@@ -1,20 +1,22 @@
 package com.uade.tpo.demo.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 @Entity
 @Data
@@ -41,7 +43,7 @@ public class Product {
 
     @Enumerated(EnumType.STRING)
     private Brand brand;
-    
+
     @Enumerated(EnumType.STRING)
     private Size size;
 
@@ -56,10 +58,11 @@ public class Product {
     private Category category;
 
     @ManyToMany
-    @JoinColumn(name = "shopping_cart_id", referencedColumnName = "id")
-    private ShoppingCart shoppingCart;
-
-    
+    @JoinTable(
+        name = "product_shopping_cart",
+        joinColumns = @JoinColumn(name = "product_id"),
+        inverseJoinColumns = @JoinColumn(name = "shopping_cart_id")
+    )
+    private List<ShoppingCart> shoppingCarts;  // Cambiado a List<ShoppingCart>
 
 }
-

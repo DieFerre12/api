@@ -31,4 +31,11 @@ public class CategoryServiceImpl implements CategoryService {
     public Optional<Category> getCategoryByType(CategoryType categoryType) {
         return categoryRepository.findByCategoryType(categoryType);  // Corregido para usar el nombre del método actualizado
     }
+
+    @Override
+    public Optional<Category> createCategory(String name, CategoryType categoryType) {
+        Category category = new Category();
+        category.setCategoryType(categoryType);
+        return Optional.of(categoryRepository.save(category));
+    }
 }

@@ -14,4 +14,6 @@ public interface CategoryService {
     public Optional<Category> getCategoryById(Long categoryId);
 
     public Optional<Category> getCategoryByType(CategoryType categoryType);
+
+    public Optional<Category> createCategory(String name, CategoryType categoryType);
 }
