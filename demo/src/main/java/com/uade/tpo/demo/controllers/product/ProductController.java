@@ -60,9 +60,9 @@ public class ProductController {
             productRequest.getImage(),
             productRequest.getPrice(),
             productRequest.getStock(),
-            productRequest.getCategory()
-            //productRequest.getBrand(),
-            //productRequest.getSize()
+            productRequest.getCategory(),
+            productRequest.getBrand(),
+            productRequest.getSize()
         );
         return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
     }

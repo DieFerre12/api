@@ -56,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product createProduct(String description, String model, String genre, String image, Double price, Integer stock, Category category)
+    public Product createProduct(String description, String model, String genre, String image, Double price, Integer stock, Category category, Brand brand, Size size )
             throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
 
         if (description == null || description.isEmpty()) {
@@ -77,8 +77,8 @@ public class ProductServiceImpl implements ProductService {
                 .price(price)
                 .stock(stock)
                 .category(category)
-                //.brand(brand)
-                //.size(size)
+                .brand(brand)
+                .size(size)
                 .build();
 
         return productRepository.save(product);
