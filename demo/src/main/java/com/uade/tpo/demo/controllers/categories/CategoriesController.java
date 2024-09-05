@@ -20,7 +20,7 @@ import com.uade.tpo.demo.entity.Category.CategoryType;
 import com.uade.tpo.demo.service.category.CategoryService;
 
 @RestController
-@RequestMapping("categories")
+@RequestMapping("/categories")
 public class CategoriesController {
 
     @Autowired

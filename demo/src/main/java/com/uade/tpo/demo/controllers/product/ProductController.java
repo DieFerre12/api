@@ -50,7 +50,7 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping 
+    @PostMapping("/new")
     public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productRequest)
             throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
         Product result = productService.createProduct(
