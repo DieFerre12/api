@@ -6,7 +6,14 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.entity.ShoppingCart;
@@ -40,18 +47,39 @@ public class ShoppingCartController {
 
     @PostMapping("/user/{userId}/addProduct")
     public ResponseEntity<?> addProductToCart(@PathVariable Long userId, @RequestBody ShoppingCart.ProductsCart productCart) {
-        Optional<Product> productOptional = productService.getProductById(Long.parseLong(productCart.getId()));
+        // Obtén el producto
+        Optional<Product> productOptional = productService.getProductById(productCart.getId());
         if (!productOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontra con ID: " + productCart.getId());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado por ID: " + productCart.getId());
         }
 
+        // Agrega el producto al carrito
         ShoppingCart cart = shoppingCartService.addProductToCart(userId, productOptional.get());
-        return ResponseEntity.ok(cart);
+
+        // Construye la respuesta
+        ShoppingCartRequest response = new ShoppingCartRequest();
+        response.setId(cart.getId());
+        response.setTotalPrice(cart.getTotalPrice());
+        response.setUser(cart.getUser());
+
+        // Prepara el producto añadido para la respuesta
+        Product addedProduct = productOptional.get();
+        ShoppingCartRequest.ProductRequest productResponse = new ShoppingCartRequest.ProductRequest(
+            addedProduct.getId(),
+            addedProduct.getModel(),  
+            addedProduct.getPrice()
+        );
+
+        response.setProducts(List.of(productResponse));
+
+        return ResponseEntity.ok(response);
     }
+
+
 
     @PutMapping("/user/{userId}/updateProduct")
     public ResponseEntity<?> updateProductInCart(@PathVariable Long userId, @RequestBody ShoppingCart.ProductsCart productCart) {
-        Optional<Product> productOptional = productService.getProductById(Long.parseLong(productCart.getId()));
+        Optional<Product> productOptional = productService.getProductById(productCart.getId());
         if (!productOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado con ID: " + productCart.getId());
         }

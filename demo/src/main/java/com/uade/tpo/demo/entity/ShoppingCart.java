@@ -42,13 +42,9 @@ public class ShoppingCart {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ProductsCart{
-        private String id;
+        private long id;
         private int cantidad;
         private double precio;
-        public Object getQuantity() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'getQuantity'");
-        }
     }
 }
 
