@@ -27,6 +27,9 @@ public class Order  {
     @Column
     private String orderDate;
 
+    @Column
+    private String paymentMethod; // Agregamos el campo del método de pago
+
     // Relación con la entidad `Client`
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -39,4 +42,23 @@ public class Order  {
     // Relación con la entidad `Detail`
     @OneToMany(mappedBy = "order")
     private List<Detail> details;
+
+    // Método para calcular el total con descuento o recargo
+    public double calculateTotal(double baseAmount) {
+        double total = baseAmount;
+        switch (paymentMethod.toLowerCase()) {
+            case "tarjeta":
+                total += baseAmount * 0.10; // 10% de recargo
+                break;
+            case "efectivo":
+                total -= baseAmount * 0.15; // 15% de descuento
+                break;
+            case "mercado_pago":
+                // No hay cambio en el total
+                break;
+            default:
+                throw new IllegalArgumentException("Método de pago no válido");
+        }
+        return total;
+    }
 }
