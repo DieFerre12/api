@@ -33,35 +33,35 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public ShoppingCart addProductToCart(Long userId, Product product) {
         ShoppingCart cart = getCartByUserId(userId).orElseGet(() -> createCart(userId));
-        cart.getProducts().add(product);
+        cart.addProduct(product, 1);  // Default quantity is 1
         return shoppingCartRepository.save(cart);
     }
 
     @Override
     public ShoppingCart updateProductInCart(Long userId, Product product) {
         ShoppingCart cart = getCartByUserId(userId).orElseThrow(() -> new RuntimeException("Carrito no encontrado"));
-        // Implement logic to update the product in the cart
+        cart.addProduct(product, 1);  // Update logic for quantity if needed
         return shoppingCartRepository.save(cart);
     }
 
     @Override
     public void removeProductFromCart(Long userId, Long productId) {
         ShoppingCart cart = getCartByUserId(userId).orElseThrow(() -> new RuntimeException("Carrito no encontrado"));
-        cart.getProducts().removeIf(p -> p.getId().equals(productId));
+        cart.getItems().removeIf(item -> item.getProduct().getId().equals(productId));
         shoppingCartRepository.save(cart);
     }
 
     @Override
     public void clearCartByUserId(Long userId) {
         ShoppingCart cart = getCartByUserId(userId).orElseThrow(() -> new RuntimeException("Carrito no encontrado"));
-        cart.getProducts().clear();
+        cart.getItems().clear();
         shoppingCartRepository.save(cart);
     }
 
     @Override
     public double calculateTotalPrice(Long userId) {
         ShoppingCart cart = getCartByUserId(userId).orElseThrow(() -> new RuntimeException("Carrito no encontrado"));
-        return cart.getProducts().stream().mapToDouble(Product::getPrice).sum();
+        return cart.getTotalPrice();
     }
 
     @Override

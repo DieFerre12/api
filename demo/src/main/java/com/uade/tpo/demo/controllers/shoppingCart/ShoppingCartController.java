@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.entity.ShoppingCart;
-import com.uade.tpo.demo.repository.UserRepository;
 import com.uade.tpo.demo.service.product.ProductService;
 import com.uade.tpo.demo.service.shoppingCart.ShoppingCartService;
 
@@ -30,9 +29,6 @@ public class ShoppingCartController {
 
     @Autowired
     private ProductService productService;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @GetMapping
     public List<ShoppingCart> getAllCarts() {
@@ -47,35 +43,31 @@ public class ShoppingCartController {
 
     @PostMapping("/user/{userId}/addProduct")
     public ResponseEntity<?> addProductToCart(@PathVariable Long userId, @RequestBody ShoppingCart.ProductsCart productCart) {
-        // Obtén el producto
         Optional<Product> productOptional = productService.getProductById(productCart.getId());
         if (!productOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado por ID: " + productCart.getId());
         }
 
-        // Agrega el producto al carrito
         ShoppingCart cart = shoppingCartService.addProductToCart(userId, productOptional.get());
 
-        // Construye la respuesta
         ShoppingCartRequest response = new ShoppingCartRequest();
         response.setId(cart.getId());
         response.setTotalPrice(cart.getTotalPrice());
         response.setUser(cart.getUser());
 
-        // Prepara el producto añadido para la respuesta
-        Product addedProduct = productOptional.get();
-        ShoppingCartRequest.ProductRequest productResponse = new ShoppingCartRequest.ProductRequest(
-            addedProduct.getId(),
-            addedProduct.getModel(),  
-            addedProduct.getPrice()
-        );
+        List<ShoppingCartRequest.ProductRequest> productResponses = cart.getItems().stream()
+            .map(item -> new ShoppingCartRequest.ProductRequest(
+                item.getProduct().getId(),
+                item.getProduct().getModel(),
+                item.getProduct().getPrice(),
+                item.getQuantity()
+            ))
+            .toList();
 
-        response.setProducts(List.of(productResponse));
+        response.setProducts(productResponses);
 
         return ResponseEntity.ok(response);
     }
-
-
 
     @PutMapping("/user/{userId}/updateProduct")
     public ResponseEntity<?> updateProductInCart(@PathVariable Long userId, @RequestBody ShoppingCart.ProductsCart productCart) {

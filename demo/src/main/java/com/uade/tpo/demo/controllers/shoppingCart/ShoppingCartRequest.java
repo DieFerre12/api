@@ -19,13 +19,15 @@ public class ShoppingCartRequest {
     @NoArgsConstructor
     public static class ProductRequest {
         private Long id;
-        private String model;  // Añade nombre si quieres mostrarlo
+        private String model;
         private double price;
+        private int quantity;  // Añadido para cantidad de productos
 
-        public ProductRequest(Long id, String model, double price) {
+        public ProductRequest(Long id, String model, double price, int quantity) {
             this.id = id;
             this.model = model;
             this.price = price;
+            this.quantity = quantity;
         }
     }
 }
