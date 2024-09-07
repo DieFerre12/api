@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 
 @Data
@@ -31,8 +32,8 @@ public class Category {
     @Column
     private CategoryType categoryType;
 
-    @OneToMany(mappedBy = "category")
-    private List<Product> products;  // Cambiado a List<Product>
+    @OneToOne(mappedBy = "category")
+    private Product product;  
 
     public enum CategoryType {
         RUNNING,

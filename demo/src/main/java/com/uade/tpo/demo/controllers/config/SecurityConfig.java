@@ -35,12 +35,12 @@ public class SecurityConfig {
 
                                                 .requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN") // Rutas de usuario
                                                 
-                                                .requestMatchers(HttpMethod.GET,"/products/**").permitAll() // Productos accesibles por GET sin autenticación
-                                                .requestMatchers("/products/**").hasAnyAuthority(Role.ADMIN.name()) // Requiere autoridad de ADMIN para otros métodos
+                                                .requestMatchers("/products/new**").permitAll() 
 
                                                 .requestMatchers("/categories/**").permitAll() // Rutas de categorías para usuarios
 
                                                 .requestMatchers("/ShoppingCart/**").permitAll()
+                                                
 
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

@@ -2,15 +2,22 @@ package com.uade.tpo.demo.controllers.shoppingCart;
 
 import java.util.List;
 
-import com.uade.tpo.demo.entity.Product;
-
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 public class ShoppingCartRequest {
-    private Long Id;
-    private List<Product> products;
-    private Integer quantity; 
-    private Double totalPrice; 
-}
+    private Long id;
+    private List<ProductRequest> products;
+    private Double totalPrice;
 
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProductRequest {
+        private String id;
+        private int quantity;
+        private double price;
+    }
+}

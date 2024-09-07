@@ -29,7 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Optional<Category> getCategoryByType(CategoryType categoryType) {
-        return categoryRepository.findByCategoryType(categoryType);  // Corregido para usar el nombre del método actualizado
+        return categoryRepository.findByCategoryType(categoryType);  
     }
 
     @Override

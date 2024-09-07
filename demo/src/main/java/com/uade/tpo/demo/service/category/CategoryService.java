@@ -16,4 +16,6 @@ public interface CategoryService {
     public Optional<Category> getCategoryByType(CategoryType categoryType);
 
     public Optional<Category> createCategory(CategoryType categoryType);
+
+    
 }

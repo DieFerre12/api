@@ -2,6 +2,7 @@ package com.uade.tpo.demo.controllers.product;
 
 import com.uade.tpo.demo.entity.Brand;
 import com.uade.tpo.demo.entity.Size;
+import com.uade.tpo.demo.entity.Category.CategoryType;
 import com.uade.tpo.demo.entity.Category;
 import lombok.Data;
 
@@ -15,6 +16,6 @@ public class ProductRequest {
     private Size size;
     private Integer stock;
     private Double price;
-    private Category category;
+    private CategoryType categoryType;
 }
 

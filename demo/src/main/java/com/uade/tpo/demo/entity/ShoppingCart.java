@@ -36,5 +36,19 @@ public class ShoppingCart {
     @ManyToOne
     @JoinColumn(name = "id_user", referencedColumnName = "id")
     private User user;
+
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProductsCart{
+        private String id;
+        private int cantidad;
+        private double precio;
+        public Object getQuantity() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'getQuantity'");
+        }
+    }
 }
 

@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.uade.tpo.demo.entity.Product;
-import com.uade.tpo.demo.entity.Brand;
-import com.uade.tpo.demo.entity.Size;
 import com.uade.tpo.demo.exceptions.InsufficientStockException;
 import com.uade.tpo.demo.exceptions.InvalidPriceException;
 import com.uade.tpo.demo.exceptions.InvalidProductDataException;
@@ -51,19 +49,20 @@ public class ProductController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productRequest)
-            throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
-        Product result = productService.createProduct(
-            productRequest.getDescription(),
-            productRequest.getModel(),
-            productRequest.getGenre(),
-            productRequest.getImage(),
-            productRequest.getPrice(),
-            productRequest.getStock(),
-            productRequest.getCategory(),
-            productRequest.getBrand(),
-            productRequest.getSize()
-        );
-        return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
-    }
+public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productRequest)
+        throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
+    Product result = productService.createProduct(
+        productRequest.getDescription(),
+        productRequest.getModel(),
+        productRequest.getGenre(),
+        productRequest.getImage(),
+        productRequest.getPrice(),
+        productRequest.getStock(),
+        productRequest.getCategoryType(),  // Pasar el CategoryType
+        productRequest.getBrand(),
+        productRequest.getSize()
+    );
+    return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
+}
+
 }
