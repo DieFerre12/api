@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 //artículo que ya existe en el inventario
 
-@ResponseStatus(code = HttpStatus.CONFLICT, reason = "El artículo ya existe en el inventario")
+@ResponseStatus(code = HttpStatus.CONFLICT, reason = "El artículo ya existe")
 public class ItemDuplicateException extends Exception {
 
 }

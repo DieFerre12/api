@@ -57,7 +57,7 @@ public class ProductServiceImpl implements ProductService {
             product.setPrice(price);
             product.setStock(stock);
             return productRepository.save(product);
-        }).orElseThrow(() -> new RuntimeException("Product not found"));
+        }).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
     }
 
     @Override
@@ -76,7 +76,7 @@ public Product createProduct(String description, String model, String genre, Str
     }
 
     Category category = categoryRepository.findByCategoryType(categoryType)
-            .orElseThrow(() -> new RuntimeException("Category not found"));
+            .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
 
     Product product = Product.builder()
             .description(description)

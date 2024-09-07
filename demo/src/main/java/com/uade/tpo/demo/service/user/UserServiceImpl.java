@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
             user.setPassword(userDetails.getPassword());
             user.setRole(userDetails.getRole());
             return userRepository.save(user);
-        }).orElseThrow(() -> new RuntimeException("User not found"));
+        }).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
 
     @Override
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
                     .build();
             return userRepository.save(newUser);
         } else {
-            throw new RuntimeException("User already exists");
+            throw new RuntimeException("El usuario ya existe");
         }
     }
 }

@@ -35,14 +35,14 @@ public class ShoppingCartController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getCartByUserId(@PathVariable Long userId) {
         Optional<ShoppingCart> cart = shoppingCartService.getCartByUserId(userId);
-        return cart.isPresent() ? ResponseEntity.ok(cart) : ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cart not found for user ID: " + userId);
+        return cart.isPresent() ? ResponseEntity.ok(cart) : ResponseEntity.status(HttpStatus.NOT_FOUND).body("Carrito no encontrado para usuario ID: " + userId);
     }
 
     @PostMapping("/user/{userId}/addProduct")
     public ResponseEntity<?> addProductToCart(@PathVariable Long userId, @RequestBody ShoppingCart.ProductsCart productCart) {
         Optional<Product> productOptional = productService.getProductById(Long.parseLong(productCart.getId()));
         if (!productOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found with ID: " + productCart.getId());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontra con ID: " + productCart.getId());
         }
 
         ShoppingCart cart = shoppingCartService.addProductToCart(userId, productOptional.get());
@@ -53,7 +53,7 @@ public class ShoppingCartController {
     public ResponseEntity<?> updateProductInCart(@PathVariable Long userId, @RequestBody ShoppingCart.ProductsCart productCart) {
         Optional<Product> productOptional = productService.getProductById(Long.parseLong(productCart.getId()));
         if (!productOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found with ID: " + productCart.getId());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado con ID: " + productCart.getId());
         }
 
         ShoppingCart cart = shoppingCartService.updateProductInCart(userId, productOptional.get());
@@ -63,13 +63,13 @@ public class ShoppingCartController {
     @DeleteMapping("/user/{userId}/removeProduct/{productId}")
     public ResponseEntity<?> removeProductFromCart(@PathVariable Long userId, @PathVariable Long productId) {
         shoppingCartService.removeProductFromCart(userId, productId);
-        return ResponseEntity.ok("Product removed from cart.");
+        return ResponseEntity.ok("Producto eliminado del carrito.");
     }
 
     @DeleteMapping("/user/{userId}/clearCart")
     public ResponseEntity<?> clearCartByUserId(@PathVariable Long userId) {
         shoppingCartService.clearCartByUserId(userId);
-        return ResponseEntity.ok("Cart cleared for user ID: " + userId);
+        return ResponseEntity.ok("Carrito vacio para usuario ID: " + userId);
     }
 
     @GetMapping("/user/{userId}/totalPrice")
