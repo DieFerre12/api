@@ -14,7 +14,7 @@ public interface ShoppingCartService {
 
    public Optional<ShoppingCart> getCartByUserId(Long userId);
 
-   public ShoppingCart addProductToCart(Long userId, Product product);
+   public ShoppingCart addProductToCart(Long userId, Product product, int quantity);
 
    public ShoppingCart updateProductInCart(Long userId, Product product);
 

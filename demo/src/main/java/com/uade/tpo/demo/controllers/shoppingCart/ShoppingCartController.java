@@ -43,13 +43,16 @@ public class ShoppingCartController {
 
     @PostMapping("/user/{userId}/addProduct")
     public ResponseEntity<?> addProductToCart(@PathVariable Long userId, @RequestBody ShoppingCart.ProductsCart productCart) {
+        // Busca el producto
         Optional<Product> productOptional = productService.getProductById(productCart.getId());
         if (!productOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado por ID: " + productCart.getId());
         }
 
-        ShoppingCart cart = shoppingCartService.addProductToCart(userId, productOptional.get());
+        // Agrega el producto al carrito con la cantidad especificada
+        ShoppingCart cart = shoppingCartService.addProductToCart(userId, productOptional.get(), productCart.getCantidad());
 
+        // Prepara la respuesta
         ShoppingCartRequest response = new ShoppingCartRequest();
         response.setId(cart.getId());
         response.setTotalPrice(cart.getTotalPrice());
@@ -60,7 +63,7 @@ public class ShoppingCartController {
                 item.getProduct().getId(),
                 item.getProduct().getModel(),
                 item.getProduct().getPrice(),
-                item.getQuantity()
+                item.getQuantity()  // Devuelve la cantidad correcta en la respuesta
             ))
             .toList();
 
@@ -68,6 +71,7 @@ public class ShoppingCartController {
 
         return ResponseEntity.ok(response);
     }
+
 
     @PutMapping("/user/{userId}/updateProduct")
     public ResponseEntity<?> updateProductInCart(@PathVariable Long userId, @RequestBody ShoppingCart.ProductsCart productCart) {

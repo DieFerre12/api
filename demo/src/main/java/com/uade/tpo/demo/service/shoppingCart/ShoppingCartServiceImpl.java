@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uade.tpo.demo.entity.CartItem;
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.entity.ShoppingCart;
 import com.uade.tpo.demo.repository.ShoppingCartRepository;
@@ -30,10 +31,28 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartRepository.findByUserId(userId);
     }
 
-    @Override
-    public ShoppingCart addProductToCart(Long userId, Product product) {
+    public ShoppingCart addProductToCart(Long userId, Product product, int quantity) {
         ShoppingCart cart = getCartByUserId(userId).orElseGet(() -> createCart(userId));
-        cart.addProduct(product, 1);  // Default quantity is 1
+
+        // Busca si el producto ya está en el carrito
+        CartItem item = cart.getItems().stream()
+            .filter(i -> i.getProduct().getId().equals(product.getId()))
+            .findFirst()
+            .orElse(null);
+
+        if (item == null) {
+            // Si el producto no está en el carrito, añade uno nuevo con la cantidad especificada
+            item = new CartItem();
+            item.setProduct(product);
+            item.setQuantity(quantity);  // Aquí se utiliza la cantidad correcta
+            item.setShoppingCart(cart);
+            cart.getItems().add(item);
+        } else {
+            // Si ya está en el carrito, actualiza la cantidad
+            item.setQuantity(item.getQuantity() + quantity);  // Incrementa la cantidad existente
+        }
+
+        cart.updateTotalPrice();  // Recalcula el precio total
         return shoppingCartRepository.save(cart);
     }
 
@@ -70,4 +89,5 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cart.setUser(userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Usuario no encontrado")));
         return shoppingCartRepository.save(cart);
     }
+
 }

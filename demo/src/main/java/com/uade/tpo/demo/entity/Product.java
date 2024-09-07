@@ -2,8 +2,6 @@ package com.uade.tpo.demo.entity;
 
 import java.util.List;
 
-import com.uade.tpo.demo.entity.Category.CategoryType;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -65,7 +63,5 @@ public class Product {
         joinColumns = @JoinColumn(name = "product_id"),
         inverseJoinColumns = @JoinColumn(name = "shopping_cart_id")
     )
-
     private List<ShoppingCart> shoppingCarts;
-
 }
