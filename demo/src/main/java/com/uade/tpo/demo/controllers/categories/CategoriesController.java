@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.demo.entity.Category;
 import com.uade.tpo.demo.entity.Category.CategoryType;
+import com.uade.tpo.demo.exceptions.CategoryDuplicateException;
+import com.uade.tpo.demo.exceptions.CategoryNotFoundException;
 import com.uade.tpo.demo.service.category.CategoryService;
 
 @RestController
@@ -36,35 +38,31 @@ public class CategoriesController {
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable Long categoryId) {
-        Optional<Category> result = categoryService.getCategoryById(categoryId);
-        if (result.isPresent())
-            return ResponseEntity.ok(result.get());
-
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Object> getCategoryById(@PathVariable Long categoryId) {
+        try {
+            Category result = categoryService.getCategoryById(categoryId);
+            return ResponseEntity.ok(result.getId());
+        } catch (CategoryNotFoundException | CategoryDuplicateException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categoría no encontrada.");
+        }
     }
 
     @PostMapping
     public ResponseEntity<Object> selectCategory(@RequestBody CategoryType categoryType) {
-        Optional<Category> result = categoryService.getCategoryByType(categoryType);
-        if (result.isPresent()) {
-            return ResponseEntity.ok(result.get());
-        } else {
-            return ResponseEntity.status(404).body("La categoría no existe");
+        try {
+            Category result = categoryService.getCategoryByType(categoryType);
+            return ResponseEntity.ok(result.getId());
+        } catch (CategoryNotFoundException | CategoryDuplicateException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La categoría no existe.");
         }
     }
 
-    @PostMapping("/categories")
-    public ResponseEntity<Category> createCategory(@RequestBody CategoryRequest categoryRequest) {
-        Optional<Category> result = categoryService.createCategory(categoryRequest.getCategoryType());
-        if (result.isPresent()) {
-            return ResponseEntity.ok(result.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    @PostMapping("/create")
+    public ResponseEntity<Object> createCategory(@RequestBody CategoryRequest categoryRequest)
+            throws CategoryDuplicateException {
+        // El servicio lanza CategoryDuplicateException si la categoría ya existe
+        Category result = categoryService.createCategory(categoryRequest.getCategoryType());
+        return ResponseEntity.ok(result.getId());
     }
-    
 
-
-    
 }

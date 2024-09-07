@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.uade.tpo.demo.entity.Category;
 import com.uade.tpo.demo.entity.Category.CategoryType;
+import com.uade.tpo.demo.exceptions.CategoryDuplicateException;
+import com.uade.tpo.demo.exceptions.CategoryNotFoundException;
 import com.uade.tpo.demo.repository.CategoryRepository;
 
 @Service
@@ -23,19 +25,30 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Optional<Category> getCategoryById(Long categoryId) {
-        return categoryRepository.findById(categoryId);
+    public Category getCategoryById(Long categoryId) throws CategoryNotFoundException {
+        // Lanza CategoryNotFoundException si no encuentra la categoría por ID
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CategoryNotFoundException());
     }
 
     @Override
-    public Optional<Category> getCategoryByType(CategoryType categoryType) {
-        return categoryRepository.findByCategoryType(categoryType);  
+    public Category getCategoryByType(CategoryType categoryType) throws CategoryNotFoundException {
+        // Lanza CategoryNotFoundException si no encuentra la categoría por tipo
+        return categoryRepository.findByCategoryType(categoryType)
+                .orElseThrow(() -> new CategoryNotFoundException());
     }
 
     @Override
-    public Optional<Category> createCategory(CategoryType categoryType) {
-        Category category = new Category();
-        category.setCategoryType(categoryType);
-        return Optional.of(categoryRepository.save(category));
+    public Category createCategory(CategoryType categoryType) throws CategoryDuplicateException {
+        // Verifica si la categoría ya existe
+        Optional<Category> existingCategory = categoryRepository.findByCategoryType(categoryType);
+        if (existingCategory.isPresent()) {
+            // Si la categoría ya existe, lanza CategoryDuplicateException
+            throw new CategoryDuplicateException();
+        }
+        // Si no existe, crea la nueva categoría
+        Category newCategory = new Category();
+        newCategory.setCategoryType(categoryType);
+        return categoryRepository.save(newCategory);
     }
 }

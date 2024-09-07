@@ -7,15 +7,17 @@ import org.springframework.data.domain.PageRequest;
 
 import com.uade.tpo.demo.entity.Category;
 import com.uade.tpo.demo.entity.Category.CategoryType;
+import com.uade.tpo.demo.exceptions.CategoryDuplicateException;
+import com.uade.tpo.demo.exceptions.CategoryNotFoundException;
 
 public interface CategoryService {
     public Page<Category> getCategories(PageRequest pageRequest);
 
-    public Optional<Category> getCategoryById(Long categoryId);
+    public Category getCategoryById(Long categoryId) throws CategoryDuplicateException, CategoryNotFoundException;
 
-    public Optional<Category> getCategoryByType(CategoryType categoryType);
+    public Category getCategoryByType(CategoryType categoryType) throws CategoryDuplicateException, CategoryNotFoundException;
 
-    public Optional<Category> createCategory(CategoryType categoryType);
+    public Category createCategory(CategoryType categoryType) throws CategoryDuplicateException;
 
     
 }

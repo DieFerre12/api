@@ -42,4 +42,5 @@ public class Category {
         STREET,
         CASUAL
     }
+
 }
