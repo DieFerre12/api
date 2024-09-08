@@ -78,7 +78,10 @@ public class OrderServiceImpl implements OrderService {
         order.setUser(cart.getUser());
         order.setPaymentMethod(paymentMethod);
         try {
-            Timestamp timestamp = new Timestamp(new SimpleDateFormat("yyyy-MM-dd").parse(orderDate).getTime());
+            // Cambiar a formato Timestamp
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date parsedDate = dateFormat.parse(orderDate);
+            Timestamp timestamp = new Timestamp(parsedDate.getTime());
             order.setOrderDate(timestamp);
         } catch (ParseException e) {
             throw new IllegalArgumentException("Formato de fecha no válido. Use 'yyyy-MM-dd'.");
@@ -94,4 +97,5 @@ public class OrderServiceImpl implements OrderService {
     
         return order;
     }
+    
 }
