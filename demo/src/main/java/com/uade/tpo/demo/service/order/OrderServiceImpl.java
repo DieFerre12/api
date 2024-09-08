@@ -1,18 +1,20 @@
 package com.uade.tpo.demo.service.order;
 
-import com.uade.tpo.demo.entity.*;
-import com.uade.tpo.demo.repository.OrderRepository;
-import com.uade.tpo.demo.service.shoppingCart.ShoppingCartService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import static com.uade.tpo.demo.service.order.OrderServiceImpl.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.uade.tpo.demo.controllers.order.OrderResponse;
+import com.uade.tpo.demo.entity.Detail;
+import com.uade.tpo.demo.entity.Order;
+import com.uade.tpo.demo.entity.ShoppingCart;
+import com.uade.tpo.demo.repository.OrderRepository;
+import com.uade.tpo.demo.service.shoppingCart.ShoppingCartService;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -29,7 +31,7 @@ public class OrderServiceImpl implements OrderService {
     private ShoppingCartService shoppingCartService;
 
     @Override
-    public Order createOrder(Long id, String paymentMethod, String orderDate) {
+    public OrderResponse createOrder(Long id, String paymentMethod, String orderDate) {
         validatePaymentMethod(paymentMethod);
 
         ShoppingCart cart = getShoppingCart(id);
@@ -37,12 +39,12 @@ public class OrderServiceImpl implements OrderService {
         double finalTotal = calculateTotal(cart.getTotalPrice(), paymentMethod);
 
         order.setTotalPrice(finalTotal);
-
         order = orderRepository.save(order);
         shoppingCartService.clearCartByUserId(id);
 
-        return order;
+        return buildOrderResponse(order);
     }
+
 
     @Override
     public Order getOrderById(Long orderId) {
@@ -97,5 +99,30 @@ public class OrderServiceImpl implements OrderService {
     
         return order;
     }
+
+    private OrderResponse buildOrderResponse(Order order) {
+        OrderResponse response = new OrderResponse();
+        
+        response.setOrderId(order.getId());
+        response.setOrderDate(new SimpleDateFormat("yyyy-MM-dd").format(order.getOrderDate()));
+        response.setPaymentMethod(order.getPaymentMethod());
+        response.setUserName(order.getUser().getFirstName() + " " + order.getUser().getLastName());
+        
+        List<OrderResponse.ProductDetail> productDetails = order.getDetails().stream()
+                .map(detail -> {
+                    OrderResponse.ProductDetail productDetail = new OrderResponse.ProductDetail();
+                    productDetail.setModel(detail.getProduct().getModel());
+                    productDetail.setQuantity(detail.getQuantity());
+                    productDetail.setPrice(detail.getPrice());
+                    return productDetail;
+                })
+                .toList();
+        
+        response.setProducts(productDetails);
+        response.setTotalPrice(order.getTotalPrice());
+        
+        return response;
+    }
+    
     
 }
