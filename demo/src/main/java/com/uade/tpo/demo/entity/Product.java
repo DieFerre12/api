@@ -57,11 +57,5 @@ public class Product {
     @JoinColumn(name = "categoryType", referencedColumnName = "id")
     private Category category;
 
-    @ManyToMany
-    @JoinTable(
-        name = "product_shopping_cart",
-        joinColumns = @JoinColumn(name = "product_id"),
-        inverseJoinColumns = @JoinColumn(name = "shopping_cart_id")
-    )
-    private List<ShoppingCart> shoppingCarts;
+   
 }

@@ -16,6 +16,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.uade.tpo.demo.entity.CartItem;
 
 @Entity
@@ -30,6 +32,7 @@ public class ShoppingCart {
     private Long id;
 
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<CartItem> items = new ArrayList<>();
 
     @Column
@@ -38,6 +41,37 @@ public class ShoppingCart {
     @ManyToOne
     @JoinColumn(name = "id_user", referencedColumnName = "id")
     private User user;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProductsCart {
+        private long id;
+        private int quantity;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void addProduct(Product product, int quantity) {
         CartItem existingItem = items.stream()
@@ -62,13 +96,5 @@ public class ShoppingCart {
         this.totalPrice = items.stream()
             .mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity())
             .sum();
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ProductsCart {
-        private long id;
-        private int cantidad;
     }
 }

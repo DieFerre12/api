@@ -32,9 +32,6 @@ public class Category {
     @Column
     private CategoryType categoryType;
 
-    @OneToOne(mappedBy = "category")
-    private Product product;  
-
     public enum CategoryType {
         RUNNING,
         BASKETBALL,

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.tpo.demo.controllers.user.UserResponse;
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.entity.ShoppingCart;
 import com.uade.tpo.demo.service.product.ProductService;
@@ -30,6 +31,7 @@ public class ShoppingCartController {
     @Autowired
     private ProductService productService;
 
+    
     @GetMapping
     public List<ShoppingCart> getAllCarts() {
         return shoppingCartService.getAllCarts();
@@ -50,13 +52,14 @@ public class ShoppingCartController {
         }
 
         // Agrega el producto al carrito con la cantidad especificada
-        ShoppingCart cart = shoppingCartService.addProductToCart(userId, productOptional.get(), productCart.getCantidad());
+        ShoppingCart cart = shoppingCartService.addProductToCart(userId, productOptional.get(), productCart.getQuantity());
 
         // Prepara la respuesta
         ShoppingCartRequest response = new ShoppingCartRequest();
         response.setId(cart.getId());
         response.setTotalPrice(cart.getTotalPrice());
-        response.setUser(cart.getUser());
+        response.setUserResponse(new UserResponse(cart.getUser().getId(), cart.getUser().getEmail(), cart.getUser().getFirstName(), cart.getUser().getLastName()));
+        
 
         List<ShoppingCartRequest.ProductRequest> productResponses = cart.getItems().stream()
             .map(item -> new ShoppingCartRequest.ProductRequest(
