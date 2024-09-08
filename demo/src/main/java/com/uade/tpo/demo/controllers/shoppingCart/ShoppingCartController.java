@@ -38,10 +38,34 @@ public class ShoppingCartController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getCartByUserId(@PathVariable Long userId) {
-        Optional<ShoppingCart> cart = shoppingCartService.getCartByUserId(userId);
-        return cart.isPresent() ? ResponseEntity.ok(cart) : ResponseEntity.status(HttpStatus.NOT_FOUND).body("Carrito no encontrado para usuario ID: " + userId);
+public ResponseEntity<?> getCartByUserId(@PathVariable Long userId) {
+    Optional<ShoppingCart> cart = shoppingCartService.getCartByUserId(userId);
+
+    if (cart.isPresent()) {
+        ShoppingCart shoppingCart = cart.get();
+
+        UserResponse userResponse = new UserResponse(shoppingCart.getUser().getEmail(), shoppingCart.getUser().getFirstName(), shoppingCart.getUser().getLastName());
+
+        ShoppingCartRequest shoppingCartRequest = ShoppingCartRequest.builder()
+            .id(shoppingCart.getId())
+            .totalPrice(shoppingCart.getTotalPrice())
+            .userResponse(userResponse)
+            .products(shoppingCart.getItems().stream()
+                .map(item -> new ShoppingCartRequest.ProductRequest(
+                    item.getProduct().getModel(),
+                    item.getProduct().getPrice(),
+                    item.getQuantity()
+                ))
+                .toList()
+            )
+            .build();
+
+        return ResponseEntity.ok(shoppingCartRequest);
+    } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Carrito no encontrado para usuario ID: " + userId);
     }
+}
+
 
     @PostMapping("/user/{userId}/addProduct")
     public ResponseEntity<?> addProductToCart(@PathVariable Long userId, @RequestBody ShoppingCart.ProductsCart productCart) {
@@ -58,12 +82,11 @@ public class ShoppingCartController {
         ShoppingCartRequest response = new ShoppingCartRequest();
         response.setId(cart.getId());
         response.setTotalPrice(cart.getTotalPrice());
-        response.setUserResponse(new UserResponse(cart.getUser().getId(), cart.getUser().getEmail(), cart.getUser().getFirstName(), cart.getUser().getLastName()));
+        response.setUserResponse(new UserResponse(cart.getUser().getEmail(), cart.getUser().getFirstName(), cart.getUser().getLastName()));
         
 
         List<ShoppingCartRequest.ProductRequest> productResponses = cart.getItems().stream()
             .map(item -> new ShoppingCartRequest.ProductRequest(
-                item.getProduct().getId(),
                 item.getProduct().getModel(),
                 item.getProduct().getPrice(),
                 item.getQuantity()  // Devuelve la cantidad correcta en la respuesta
