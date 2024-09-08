@@ -52,6 +52,7 @@ public ResponseEntity<?> getCartByUserId(@PathVariable Long userId) {
             .userResponse(userResponse)
             .products(shoppingCart.getItems().stream()
                 .map(item -> new ShoppingCartRequest.ProductRequest(
+                    item.getProduct().getId(),
                     item.getProduct().getModel(),
                     item.getProduct().getPrice(),
                     item.getQuantity()
@@ -87,6 +88,7 @@ public ResponseEntity<?> getCartByUserId(@PathVariable Long userId) {
 
         List<ShoppingCartRequest.ProductRequest> productResponses = cart.getItems().stream()
             .map(item -> new ShoppingCartRequest.ProductRequest(
+                item.getProduct().getId(),
                 item.getProduct().getModel(),
                 item.getProduct().getPrice(),
                 item.getQuantity()  // Devuelve la cantidad correcta en la respuesta

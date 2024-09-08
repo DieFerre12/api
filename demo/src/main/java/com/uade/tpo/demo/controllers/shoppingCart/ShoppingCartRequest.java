@@ -24,6 +24,7 @@ public class ShoppingCartRequest {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ProductRequest {
+        private Long id;
         private String model;
         private double price;
         private int quantity;  
