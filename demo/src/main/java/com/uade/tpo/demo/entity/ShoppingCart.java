@@ -88,7 +88,6 @@ public class ShoppingCart {
             newItem.setShoppingCart(this);
             items.add(newItem);
         }
-
         updateTotalPrice();
     }
 

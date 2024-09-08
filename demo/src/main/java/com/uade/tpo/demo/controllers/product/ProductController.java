@@ -4,6 +4,7 @@ import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,8 @@ import com.uade.tpo.demo.exceptions.InsufficientStockException;
 import com.uade.tpo.demo.exceptions.InvalidPriceException;
 import com.uade.tpo.demo.exceptions.InvalidProductDataException;
 import com.uade.tpo.demo.service.product.ProductService;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping("/products")
@@ -45,7 +48,7 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/new")
@@ -63,6 +66,23 @@ public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productR
         productRequest.getSize()
     );
     return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
+}
+
+@PutMapping("/{id}")
+public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody ProductRequest productRequest) {
+    try {
+        Product updatedProduct = productService.updateProduct(
+                id,
+                productRequest.getDescription(),
+                productRequest.getModel(),
+                productRequest.getGenre(),
+                productRequest.getPrice(),
+                productRequest.getStock()
+        );
+        return ResponseEntity.ok(updatedProduct);
+    } catch (InvalidPriceException | InsufficientStockException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
 }
 
 }
