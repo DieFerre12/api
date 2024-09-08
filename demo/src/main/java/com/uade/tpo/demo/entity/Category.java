@@ -28,12 +28,9 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)  // Guarda el nombre del enum como un String en la base de datos
+    @Enumerated(EnumType.STRING)  
     @Column
-    private CategoryType categoryType;
-
-    @OneToOne(mappedBy = "category")
-    private Product product;  
+    private CategoryType categoryType; 
 
     public enum CategoryType {
         RUNNING,
