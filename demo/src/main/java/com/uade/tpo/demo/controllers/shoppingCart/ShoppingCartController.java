@@ -75,15 +75,25 @@ public ResponseEntity<?> getCartByUserId(@PathVariable Long userId) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado por ID: " + productCart.getId());
         }
 
+        Product product = productOptional.get();
+        
+        // Validaciones de cantidad
+        if (productCart.getQuantity() <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La cantidad debe ser mayor que cero.");
+        }
+
+        if (productCart.getQuantity() > product.getStock()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Cantidad solicitada excede el stock disponible.");
+        }
+
         // Agrega el producto al carrito con la cantidad especificada
-        ShoppingCart cart = shoppingCartService.addProductToCart(userId, productOptional.get(), productCart.getQuantity());
+        ShoppingCart cart = shoppingCartService.addProductToCart(userId, product, productCart.getQuantity());
 
         // Prepara la respuesta
         ShoppingCartRequest response = new ShoppingCartRequest();
         response.setId(cart.getId());
         response.setTotalPrice(cart.getTotalPrice());
         response.setUserResponse(new UserResponse(cart.getUser().getEmail(), cart.getUser().getFirstName(), cart.getUser().getLastName()));
-        
 
         List<ShoppingCartRequest.ProductRequest> productResponses = cart.getItems().stream()
             .map(item -> new ShoppingCartRequest.ProductRequest(
@@ -97,6 +107,7 @@ public ResponseEntity<?> getCartByUserId(@PathVariable Long userId) {
 
         return ResponseEntity.ok(response);
     }
+
 
 
     @PutMapping("/user/{userId}/updateProduct")
