@@ -13,6 +13,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data; 
+import java.util.Date;
 
 
 @Data
@@ -25,7 +26,7 @@ public class Order  {
     private Long id;
     
     @Column
-    private String orderDate;
+    private Date orderDate;
 
     @Column
     private String paymentMethod; // Agregamos el campo del método de pago
