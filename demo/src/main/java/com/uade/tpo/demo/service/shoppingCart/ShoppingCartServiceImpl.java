@@ -31,8 +31,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartRepository.findByUserId(userId);
     }
 
+    @Override
     public ShoppingCart addProductToCart(Long userId, Product product, int quantity) {
         ShoppingCart cart = getCartByUserId(userId).orElseGet(() -> createCart(userId));
+
+        // Verificar si hay suficiente stock
+        if (product.getStock() < quantity) {
+            throw new IllegalArgumentException("No hay suficiente stock para el producto: " + product.getModel());
+        }
 
         // Busca si el producto ya está en el carrito
         CartItem item = cart.getItems().stream()
@@ -48,11 +54,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             item.setShoppingCart(cart);
             cart.getItems().add(item);
         } else {
-            // Si ya está en el carrito, actualiza la cantidad
-            item.setQuantity(item.getQuantity() + quantity);  // Incrementa la cantidad existente
+            // Si el producto ya está en el carrito, actualiza la cantidad
+            item.setQuantity(item.getQuantity() + quantity);
         }
 
-        cart.updateTotalPrice();  // Recalcula el precio total
+        // Restar la cantidad del stock del producto
+        product.setStock(product.getStock() - quantity);
+
         return shoppingCartRepository.save(cart);
     }
 
