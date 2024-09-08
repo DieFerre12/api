@@ -46,8 +46,5 @@ public class Detail {
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
-    // Relación con la entidad `Facture`
-    @ManyToOne
-    @JoinColumn(name = "facture_id", referencedColumnName = "id")
-    private Facture facture;
+    
 }

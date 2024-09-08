@@ -2,25 +2,23 @@ package com.uade.tpo.demo.controllers.order;
 
 import com.uade.tpo.demo.entity.Order;
 import com.uade.tpo.demo.service.order.OrderService;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/order")
 public class OrderController {
 
+    @Autowired
     private OrderService orderService;
 
-    @Autowired
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
+    @PostMapping("/create")
+    public Order createOrder(@RequestBody OrderRequest orderRequest) {
+        return orderService.createOrder(orderRequest.getId(), orderRequest.getPaymentMethod(), orderRequest.getOrderDate());
     }
 
-    @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody Order order, @RequestParam double baseAmount) {
-        Order newOrder = orderService.createOrder(order, baseAmount);
-        return ResponseEntity.ok(newOrder);
+    @GetMapping("/{orderId}")
+    public Order getOrderById(@PathVariable Long orderId) {
+        return orderService.getOrderById(orderId);
     }
 }

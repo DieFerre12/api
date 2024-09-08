@@ -34,6 +34,7 @@ public class SecurityConfig {
                                                 .requestMatchers("/public/**").permitAll() // Rutas públicas
 
                                                 .requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN") // Rutas de usuario
+                                                .requestMatchers("/order/**").hasAnyAuthority("USER", "ADMIN") // Rutas de orden
                                                 
                                                 .requestMatchers("/products/new**").permitAll() 
 
