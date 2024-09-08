@@ -28,18 +28,19 @@ public class SecurityConfig {
                 http
                                 .csrf(AbstractHttpConfigurer::disable)
                                 .authorizeHttpRequests(req -> req
-                                                .requestMatchers("/api/v1/auth/**").permitAll() // Rutas de autenticación
-                                                .requestMatchers("/users/**").hasAnyAuthority(Role.ADMIN.name()) // Rutas de administracion de usuarios
-                                                
-                                                .requestMatchers("/products/**").hasAnyAuthority(Role.ADMIN.name())
-                                                .requestMatchers(HttpMethod.GET,"/products/**").hasAnyAuthority(Role.USER.name()) 
-                                                
-                                                .requestMatchers("/orders/**").hasAnyAuthority(Role.ADMIN.name()) // Rutas de pedidos para usuarios
-
-                                                .requestMatchers("/categories/**").hasAnyAuthority(Role.ADMIN.name())
-                                                .requestMatchers(HttpMethod.GET, "/categories/**").hasAnyAuthority(Role.USER.name()) // Rutas de categorías para usuarios
-
-                                                .requestMatchers("/ShoppingCart/**").permitAll()
+                                .requestMatchers("/api/v1/auth/").permitAll() // Rutas de autenticación
+                                .requestMatchers("/error/").permitAll() // Rutas de error
+                                .requestMatchers("/public/").permitAll() // Rutas públicas
+                                
+                                .requestMatchers("/user/").hasAnyAuthority("USER", "ADMIN") // Rutas de usuario
+                                .requestMatchers("/order/**").hasAnyAuthority("USER", "ADMIN") // Rutas de orden
+                                
+                                .requestMatchers("/products/new").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+                                
+                                .requestMatchers("/categories/").permitAll() // Rutas de categorías para usuarios
+                                
+                                .requestMatchers("/ShoppingCart/**").permitAll()
 
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

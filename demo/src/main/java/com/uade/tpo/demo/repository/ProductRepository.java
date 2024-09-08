@@ -1,15 +1,15 @@
 package com.uade.tpo.demo.repository;
 
-import com.uade.tpo.demo.entity.Category;
 import com.uade.tpo.demo.entity.Product;
+import com.uade.tpo.demo.entity.Category;
 import com.uade.tpo.demo.entity.Category.CategoryType;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findByCategory(CategoryType categoryType);
+    Optional<Product> findByCategory(Category category);
 }

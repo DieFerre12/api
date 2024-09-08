@@ -110,6 +110,18 @@ public Product createProduct(String description, String model, String genre, Str
 
     return productRepository.save(product);
     }
+
+    @Override
+public Optional<Product> findByCategoryType(CategoryType categoryType) {
+    // Obtén la categoría desde el repositorio usando el CategoryType
+    Category category = categoryRepository.findByCategoryType(categoryType)
+        .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
+    
+    // Busca productos usando la categoría obtenida
+    return productRepository.findByCategory(category);
+}
+
+
 }
 
 

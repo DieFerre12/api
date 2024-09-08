@@ -1,6 +1,8 @@
 package com.uade.tpo.demo.controllers.product;
 
 import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.uade.tpo.demo.entity.Category.CategoryType;
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.exceptions.InsufficientStockException;
 import com.uade.tpo.demo.exceptions.InvalidPriceException;
@@ -85,4 +89,12 @@ public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody
     }
 }
 
+@GetMapping("/category/{categoryType}")
+public ResponseEntity<Optional<Product>> getProductsByCategoryType(@PathVariable CategoryType categoryType) {
+    Optional<Product> products = productService.findByCategoryType(categoryType);
+    if (products.isEmpty()) {
+        return ResponseEntity.noContent().build();
+    }
+    return ResponseEntity.ok(products);
+}
 }

@@ -27,6 +27,8 @@ public interface ProductService {
     public Product createProduct(String description, String model, String genre, String image, Double price, Integer stock, 
     CategoryType categoryType, Brand brand, Size size) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException;
 
+    public   Optional<Product> findByCategoryType(CategoryType categoryType);
+
 
 }
 
