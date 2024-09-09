@@ -113,7 +113,7 @@ public ResponseEntity<?> getCartByUserId(@PathVariable Long userId) {
 
 
     @PutMapping("/user/{userId}/updateProduct")
-    public ResponseEntity<?> updateProductInCart(@PathVariable Long userId, @RequestBody ShoppingCart.ProductsCart productCart) {
+    public ResponseEntity<?> updateProductInCart(@PathVariable Long userId, @RequestBody ShoppingCartRequest.ProductRequest productCart) {
         Optional<Product> productOptional = productService.getProductById(productCart.getId());
         if (!productOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado con ID: " + productCart.getId());

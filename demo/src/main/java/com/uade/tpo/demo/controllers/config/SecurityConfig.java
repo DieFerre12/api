@@ -2,6 +2,7 @@ package com.uade.tpo.demo.controllers.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,9 +25,7 @@ public class SecurityConfig {
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
                                 .csrf(AbstractHttpConfigurer::disable)
-                                .authorizeHttpRequests(req -> req
-<<<<<<< HEAD
-                                .requestMatchers("/api/v1/auth/").permitAll() // Rutas de autenticación
+                                .authorizeHttpRequests(req -> req                                .requestMatchers("/api/v1/auth/").permitAll() // Rutas de autenticación
                                 .requestMatchers("/error/").permitAll() // Rutas de error
                                 .requestMatchers("/public/").permitAll() // Rutas públicas
                                 
@@ -39,22 +38,7 @@ public class SecurityConfig {
                                 .requestMatchers("/categories/").permitAll() // Rutas de categorías para usuarios
                                 
                                 .requestMatchers("/ShoppingCart/**").permitAll()
-=======
-                                                .requestMatchers("/api/v1/auth/**").permitAll() // Rutas de autenticación
-                                                .requestMatchers("/error/**").permitAll() // Rutas de error
-                                                .requestMatchers("/admin/**").hasRole("ADMIN") // Rutas administrativas solo para ADMIN
-                                                .requestMatchers("/public/**").permitAll() // Rutas públicas
-
-                                                .requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN") // Rutas de usuario
                                                 
-                                                .requestMatchers("/products/new**").permitAll() 
-
-                                                .requestMatchers("/categories/**").permitAll() // Rutas de categorías para usuarios
-
-                                                .requestMatchers("/ShoppingCart/**").permitAll()
-                                                
->>>>>>> d9cbdd7bde754a733ecdf02388b66564d5f77cb6
-
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                                 .authenticationProvider(authenticationProvider)
