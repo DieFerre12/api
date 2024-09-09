@@ -1,5 +1,6 @@
 package com.uade.tpo.demo.service.product;
 
+import java.sql.Blob;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,7 +25,7 @@ public interface ProductService {
     
     public Product updateProduct(Long id, String name, String description, String genre, Double price, Integer stock) throws InvalidPriceException, InsufficientStockException;
     
-    public Product createProduct(String description, String model, String genre, String image, Double price, Integer stock, 
+    public Product createProduct(String description, String model, String genre, Blob blob, Double price, Integer stock, 
     CategoryType categoryType, Brand brand, Size size) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException;
 
     public   Optional<Product> findByCategoryType(CategoryType categoryType);

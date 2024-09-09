@@ -11,12 +11,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.sql.Blob;
 
 @Entity
 @Data
@@ -38,8 +41,11 @@ public class Product {
     @Column
     private String genre;
 
-    @Column
-    private String image;
+    // @Column
+    // private String image;
+
+    @Lob
+    private Blob image;
 
     @Enumerated(EnumType.STRING)
     private Brand brand;
@@ -57,5 +63,9 @@ public class Product {
     @JoinColumn(name = "categoryType", referencedColumnName = "id")
     private Category category;
 
-   
+    public void setNombre(String nombre) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setNombre'");
+    }
+
 }

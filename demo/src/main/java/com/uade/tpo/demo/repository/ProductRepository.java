@@ -10,5 +10,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findByCategory(Category category);
-    public Product saveProduct(Product product);
 }

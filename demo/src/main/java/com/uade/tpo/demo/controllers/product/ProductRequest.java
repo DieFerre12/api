@@ -1,5 +1,7 @@
 package com.uade.tpo.demo.controllers.product;
 
+import java.sql.Blob;
+
 import com.uade.tpo.demo.entity.Brand;
 import com.uade.tpo.demo.entity.Size;
 import com.uade.tpo.demo.entity.Category.CategoryType;
@@ -11,7 +13,7 @@ public class ProductRequest {
     private String description;
     private String model;
     private String genre;
-    private String image;
+    private Blob image;
     private Brand brand;
     private Size size;
     private Integer stock;
