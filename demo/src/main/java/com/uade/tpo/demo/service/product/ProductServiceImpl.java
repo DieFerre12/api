@@ -13,6 +13,7 @@ import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.entity.Brand;
 import com.uade.tpo.demo.entity.CartItem;
 import com.uade.tpo.demo.entity.Category;
+import com.uade.tpo.demo.entity.Image;
 import com.uade.tpo.demo.entity.Size;
 import com.uade.tpo.demo.exceptions.InsufficientStockException;
 import com.uade.tpo.demo.exceptions.InvalidPriceException;
@@ -82,7 +83,6 @@ public class ProductServiceImpl implements ProductService {
                 .description(description)
                 .model(model)
                 .genre(genre)
-                .image(image)
                 .price(price)
                 .stock(stock)
                 .category(category)  

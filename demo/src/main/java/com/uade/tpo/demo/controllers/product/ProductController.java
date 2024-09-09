@@ -140,39 +140,5 @@ public ResponseEntity<?> updateProductPrice(@PathVariable String model, @Request
         return ResponseEntity.ok(products);
     }
 
-    // Endpoint para subir una imagen
-    @PostMapping("/add")
-    public String addProduct(@RequestParam String model, @RequestParam MultipartFile image) throws java.io.IOException {
-        try {
-            SerialBlob imageBlob = new SerialBlob(image.getBytes());
-
-            Product product = new Product();
-            product.setModel(model);
-            product.setImage(imageBlob);
-
-            productRepository.save(product);
-            return "Producto guardado con éxito";
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
-            return "Error al subir la imagen";
-        }
-    }
-
-    // Endpoint para obtener la imagen en Base64
-    @GetMapping("/imagen/{id}")
-    public String getImage(@PathVariable Long id) {
-        Product product = productRepository.findById(id).orElse(null);
-        if (product == null) {
-            return "Producto no encontrado";
-        }
-
-        try {
-            byte[] imagenBytes = product.getImage().getBytes(1, (int) product.getImage().length());
-            return Base64.getEncoder().encodeToString(imagenBytes);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return "Error al recuperar la imagen";
-        }
-    }
 
 }
