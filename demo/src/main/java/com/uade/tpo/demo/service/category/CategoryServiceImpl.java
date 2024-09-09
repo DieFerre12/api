@@ -29,13 +29,13 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category getCategoryById(Long categoryId) throws CategoryNotFoundException {
         return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new CategoryNotFoundException());
+                .orElseThrow(() -> new CategoryNotFoundException("La categoría solicitada no existe"));
     }
 
     @Override
     public Category getCategoryByType(CategoryType categoryType) throws CategoryNotFoundException {
         return categoryRepository.findByCategoryType(categoryType)
-                .orElseThrow(() -> new CategoryNotFoundException());
+                .orElseThrow(() -> new CategoryNotFoundException("La categoría solicitada no existe"));
     }
 
     @Override
@@ -43,7 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
     public Category createCategory(CategoryType categoryType) throws CategoryDuplicateException {
         Optional<Category> existingCategory = categoryRepository.findByCategoryType(categoryType);
         if (existingCategory.isPresent()) {
-            throw new CategoryDuplicateException();
+            throw new CategoryDuplicateException("La categoria esta duplicada");
         }
         Category newCategory = new Category();
         newCategory.setCategoryType(categoryType);

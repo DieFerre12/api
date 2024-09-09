@@ -67,7 +67,7 @@ public class ProductServiceImpl implements ProductService {
             throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
 
         if (description == null || description.isEmpty()) {
-            throw new InvalidProductDataException();
+            throw new InvalidProductDataException("Los datos son inválidos o incompletos");
         }
         if (price == null || price <= 0) {
             throw new InvalidPriceException("Precio invalido");
