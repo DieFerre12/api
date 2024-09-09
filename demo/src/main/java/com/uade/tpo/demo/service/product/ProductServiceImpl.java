@@ -1,7 +1,7 @@
 package com.uade.tpo.demo.service.product;
 
 import java.util.Optional;
-
+import java.sql.Blob;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -79,7 +79,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-public Product createProduct(String description, String model, String genre, String image, Double price, Integer stock, 
+public Product createProduct(String description, String model, String genre, Blob image, Double price, Integer stock, 
                              CategoryType categoryType, Brand brand, Size size) 
         throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
 
