@@ -5,7 +5,6 @@ import java.sql.Blob;
 import com.uade.tpo.demo.entity.Brand;
 import com.uade.tpo.demo.entity.Size;
 import com.uade.tpo.demo.entity.Category.CategoryType;
-import com.uade.tpo.demo.entity.Category;
 import lombok.Data;
 
 @Data

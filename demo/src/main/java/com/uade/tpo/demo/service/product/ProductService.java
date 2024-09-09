@@ -2,6 +2,8 @@ package com.uade.tpo.demo.service.product;
 
 import java.sql.Blob;
 import java.util.Optional;
+
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,12 +25,15 @@ public interface ProductService {
     
     public void deleteProduct(Long productId);
     
-    public Product updateProduct(Long id, String name, String description, String genre, Double price, Integer stock) throws InvalidPriceException, InsufficientStockException;
+    public Product updateProductSize(String model,Size size, Integer stock) throws InsufficientStockException;
     
+    public List<Product> updateProductPrice(String model, Double price) throws InvalidPriceException;
+
     public Product createProduct(String description, String model, String genre, Blob blob, Double price, Integer stock, 
+
     CategoryType categoryType, Brand brand, Size size) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException;
 
-    public   Optional<Product> findByCategoryType(CategoryType categoryType);
+    public List<Product> findByCategoryType(CategoryType categoryType);
 
 
 }

@@ -28,7 +28,6 @@ public class Category {
 
     @Enumerated(EnumType.STRING)  // Guarda el nombre del enum como un String en la base de datos
     @Column
-    @JsonBackReference
     private CategoryType categoryType;
 
     public enum CategoryType {

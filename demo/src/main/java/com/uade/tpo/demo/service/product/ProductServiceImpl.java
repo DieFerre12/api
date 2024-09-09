@@ -1,6 +1,7 @@
 package com.uade.tpo.demo.service.product;
 
 import java.util.Optional;
+
 import java.sql.Blob;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,10 +59,15 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll(pageRequest);
     }
 
-    @Override
-    public Product updateProduct(Long productId, String name, String description, String genre, Double price, Integer stock) 
-            throws InvalidPriceException, InsufficientStockException {
 
+    @Override
+    public Product createProduct(String description, String model, String genre, Blob image, Double price, Integer stock, 
+                                CategoryType categoryType, Brand brand, Size size) 
+            throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
+
+        if (description == null || description.isEmpty()) {
+            throw new InvalidProductDataException();
+        }
         if (price == null || price <= 0) {
             throw new InvalidPriceException();
         }
@@ -69,57 +75,72 @@ public class ProductServiceImpl implements ProductService {
             throw new InsufficientStockException();
         }
 
-        return productRepository.findById(productId).map(product -> {
-            product.setDescription(description);
-            product.setGenre(genre);
-            product.setPrice(price);
-            product.setStock(stock);
-            return productRepository.save(product);
-        }).orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+        Category category = categoryRepository.findByCategoryType(categoryType)
+                .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
+
+        Product product = Product.builder()
+                .description(description)
+                .model(model)
+                .genre(genre)
+                .image(image)
+                .price(price)
+                .stock(stock)
+                .category(category)  
+                .brand(brand)
+                .size(size)
+                .build();
+
+        return productRepository.save(product);
+        }
+
+    @Override
+    public List<Product> findByCategoryType(CategoryType categoryType) {
+        Category category = categoryRepository.findByCategoryType(categoryType)
+            .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
+        
+        return productRepository.findByCategory(category);
+    }
+
+    
+    @Override
+    public Product updateProductSize(String model, Size size, Integer stock) 
+            throws InsufficientStockException {
+
+        if (stock == null || stock < 0) {
+            throw new InsufficientStockException();
+        }
+        // Busca el producto por el modelo y tamaño
+        Product product = productRepository.findByModelAndSize(model, size)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+        // Actualiza el producto encontrado
+        
+        product.setStock(stock);
+        return productRepository.save(product);
     }
 
     @Override
-public Product createProduct(String description, String model, String genre, Blob image, Double price, Integer stock, 
-                             CategoryType categoryType, Brand brand, Size size) 
-        throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
-
-    if (description == null || description.isEmpty()) {
-        throw new InvalidProductDataException();
-    }
-    if (price == null || price <= 0) {
+    public List<Product> updateProductPrice(String model, Double price) 
+            throws InvalidPriceException {
+       if (price == null || price <= 0) {
         throw new InvalidPriceException();
     }
-    if (stock == null || stock < 0) {
-        throw new InsufficientStockException();
+    List<Product> products = productRepository.findByModel(model);
+    if (products.isEmpty()) {
+        throw new RuntimeException("Producto no encontrado");
     }
 
-    Category category = categoryRepository.findByCategoryType(categoryType)
-            .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
+    // Actualizar todos los productos que tienen ese modelo
+    products.forEach(product -> {
+        product.setPrice(price);
+        productRepository.save(product);
+    });
 
-    Product product = Product.builder()
-            .description(description)
-            .model(model)
-            .genre(genre)
-            .image(image)
-            .price(price)
-            .stock(stock)
-            .category(category)  
-            .brand(brand)
-            .size(size)
-            .build();
-
-    return productRepository.save(product);
+    return products; // Retorna la lista de productos actualizado
+            
     }
 
-    @Override
-public Optional<Product> findByCategoryType(CategoryType categoryType) {
-    // Obtén la categoría desde el repositorio usando el CategoryType
-    Category category = categoryRepository.findByCategoryType(categoryType)
-        .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
-    
-    // Busca productos usando la categoría obtenida
-    return productRepository.findByCategory(category);
-}
+   
 
 
 }

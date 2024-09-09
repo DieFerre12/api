@@ -63,9 +63,4 @@ public class Product {
     @JoinColumn(name = "categoryType", referencedColumnName = "id")
     private Category category;
 
-    public void setNombre(String nombre) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setNombre'");
-    }
-
 }

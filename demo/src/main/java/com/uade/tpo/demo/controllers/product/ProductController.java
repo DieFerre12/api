@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.uade.tpo.demo.entity.Category.CategoryType;
 import com.uade.tpo.demo.entity.Product;
+import com.uade.tpo.demo.entity.Size;
 import com.uade.tpo.demo.exceptions.InsufficientStockException;
 import com.uade.tpo.demo.exceptions.InvalidPriceException;
 import com.uade.tpo.demo.exceptions.InvalidProductDataException;
@@ -83,25 +84,56 @@ public class ProductController {
         return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody ProductRequest productRequest) {
+    @PutMapping("/{model}/{size}") // CAMBIA STOCK DE CADA TALLE
+    public ResponseEntity<Product> updateProductSize(@PathVariable String model, @PathVariable Size size, @RequestBody ProductRequest productRequest) {
         try {
-            Product updatedProduct = productService.updateProduct(
-                    id,
-                    productRequest.getDescription(),
-                    productRequest.getModel(),
-                    productRequest.getGenre(),
-                    productRequest.getPrice(),
-                    productRequest.getStock());
-            return ResponseEntity.ok(updatedProduct);
-        } catch (InvalidPriceException | InsufficientStockException e) {
+            Product updatedProductSize = productService.updateProductSize(
+                    model,
+                    size,
+                    productRequest.getStock()
+            );
+            return ResponseEntity.ok(updatedProductSize);
+        } catch (InsufficientStockException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
+
+
+    @PutMapping("/{model}") // CAMBIA PRECIO DE PRODUCTO
+public ResponseEntity<?> updateProductPrice(@PathVariable String model, @RequestBody ProductRequest productRequest) {
+    try {
+        // Verifica si el precio es válido (puedes ajustar la lógica de validación según tus necesidades)
+        if (productRequest.getPrice() <= 0) {
+            throw new InvalidPriceException();
+        }
+
+        List<Product> products = productRepository.findByModel(model);
+        if (products.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado");
+        }
+
+        // Si quieres actualizar todos los productos que tienen ese modelo:
+        products.forEach(product -> {
+            product.setPrice(productRequest.getPrice());
+            productRepository.save(product);
+        });
+
+        return ResponseEntity.ok(products.get(0)); // Devuelve el primer producto actualizado
+
+    } catch (InvalidPriceException e) {
+        // Devuelve un error 400 (Bad Request) con el mensaje de la excepción
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+}
+
+
+
     @GetMapping("/category/{categoryType}")
-    public ResponseEntity<Optional<Product>> getProductsByCategoryType(@PathVariable CategoryType categoryType) {
-        Optional<Product> products = productService.findByCategoryType(categoryType);
+    public ResponseEntity<List<Product>> getProductsByCategoryType(@PathVariable CategoryType categoryType) {
+        List<Product> products = productService.findByCategoryType(categoryType);
         if (products.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -110,9 +142,8 @@ public class ProductController {
 
     // Endpoint para subir una imagen
     @PostMapping("/add")
-    public String agregarProducto(@RequestParam("nombre") String model, @RequestParam("image") MultipartFile image) throws java.io.IOException {
+    public String addProduct(@RequestParam String model, @RequestParam MultipartFile image) throws java.io.IOException {
         try {
-            // Convertir el archivo a Blob
             SerialBlob imageBlob = new SerialBlob(image.getBytes());
 
             Product product = new Product();
@@ -129,7 +160,7 @@ public class ProductController {
 
     // Endpoint para obtener la imagen en Base64
     @GetMapping("/imagen/{id}")
-    public String obtenerImagen(@PathVariable Long id) {
+    public String getImage(@PathVariable Long id) {
         Product product = productRepository.findById(id).orElse(null);
         if (product == null) {
             return "Producto no encontrado";
