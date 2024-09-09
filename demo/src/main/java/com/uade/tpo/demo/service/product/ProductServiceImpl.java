@@ -39,20 +39,21 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(productId);
     }
 
-    public void deleteProduct(Long id) {
-        Optional<Product> optionalProduct = productRepository.findById(id);
-        if (optionalProduct.isPresent()) {
-            Product product = optionalProduct.get();
-            
+    public void deleteProduct(String model) {
+        List<Product> products = productRepository.findByModel(model);
+        if (products.isEmpty()) {
+            throw new RuntimeException("Producto no encontrado");
+    }
+
+        // Eliminar el producto
+        for (Product product : products) {
             // Eliminar los CartItem asociados
             List<CartItem> cartItems = cartItemRepository.findByProduct(product);
             cartItemRepository.deleteAll(cartItems);
-            
+
             // Eliminar el producto
             productRepository.delete(product);
-        } else {
-            return;
-        }
+    }
     }
 
     @Override
@@ -67,10 +68,10 @@ public class ProductServiceImpl implements ProductService {
             throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
 
         if (description == null || description.isEmpty()) {
-            throw new InvalidProductDataException();
+            throw new InvalidProductDataException("Los datos son inválidos o incompletos");
         }
         if (price == null || price <= 0) {
-            throw new InvalidPriceException();
+            throw new InvalidPriceException("Precio invalido");
         }
         if (stock == null || stock < 0) {
             throw new InsufficientStockException();
@@ -123,7 +124,7 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> updateProductPrice(String model, Double price) 
             throws InvalidPriceException {
        if (price == null || price <= 0) {
-        throw new InvalidPriceException();
+        throw new InvalidPriceException("Precio invalido");
     }
     List<Product> products = productRepository.findByModel(model);
     if (products.isEmpty()) {
@@ -138,6 +139,15 @@ public class ProductServiceImpl implements ProductService {
 
     return products; // Retorna la lista de productos actualizado
             
+    }
+
+    @Override
+    public List<Product> getProductByModel(String model) {
+        List<Product> products = productRepository.findByModel(model);
+    if (products.isEmpty()) {
+        throw new RuntimeException("Producto no encontrado");
+    }
+    return products;
     }
 
    

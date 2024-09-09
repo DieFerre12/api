@@ -46,31 +46,10 @@ public class ShoppingCart {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ProductsCart {
-        private long id;
+        private Size size;
+        private String model;
         private int quantity;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     public void addProduct(Product product, int quantity) {

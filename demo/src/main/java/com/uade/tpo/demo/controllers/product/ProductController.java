@@ -61,12 +61,17 @@ public class ProductController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/{model}")
+    public ResponseEntity<String> deleteProduct(@PathVariable String model) {
+        try {
+            productService.deleteProduct(model);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            // Manejo del error en caso de que el producto no se encuentre
+            return ResponseEntity.ok("Product deleted successfully.");
+        }
     }
+
 
     @PostMapping("/new")
     public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productRequest)
@@ -107,7 +112,7 @@ public ResponseEntity<?> updateProductPrice(@PathVariable String model, @Request
     try {
         // Verifica si el precio es válido (puedes ajustar la lógica de validación según tus necesidades)
         if (productRequest.getPrice() <= 0) {
-            throw new InvalidPriceException();
+            throw new InvalidPriceException("El precio es inválido");
         }
 
         List<Product> products = productRepository.findByModel(model);

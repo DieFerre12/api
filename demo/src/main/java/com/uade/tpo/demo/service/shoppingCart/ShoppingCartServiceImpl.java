@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.uade.tpo.demo.entity.CartItem;
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.entity.ShoppingCart;
+import com.uade.tpo.demo.entity.Size;
 import com.uade.tpo.demo.repository.ShoppingCartRepository;
 import com.uade.tpo.demo.repository.UserRepository;
 
@@ -32,37 +33,48 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCart addProductToCart(Long userId, Product product, int quantity) {
-        ShoppingCart cart = getCartByUserId(userId).orElseGet(() -> createCart(userId));
+public ShoppingCart addProductToCart(Long userId, Product product, int quantity, String model, Size size) {
+    ShoppingCart cart = getCartByUserId(userId).orElseGet(() -> createCart(userId));
 
-        // Verificar si hay suficiente stock
-        if (product.getStock() < quantity) {
-            throw new IllegalArgumentException("No hay suficiente stock para el producto: " + product.getModel());
-        }
-
-        // Busca si el producto ya está en el carrito
-        CartItem item = cart.getItems().stream()
-            .filter(i -> i.getProduct().getId().equals(product.getId()))
-            .findFirst()
-            .orElse(null);
-
-        if (item == null) {
-            // Si el producto no está en el carrito, añade uno nuevo con la cantidad especificada
-            item = new CartItem();
-            item.setProduct(product);
-            item.setQuantity(quantity);  // Aquí se utiliza la cantidad correcta
-            item.setShoppingCart(cart);
-            cart.getItems().add(item);
-        } else {
-            // Si el producto ya está en el carrito, actualiza la cantidad
-            item.setQuantity(item.getQuantity() + quantity);
-        }
-
-        // Restar la cantidad del stock del producto
-        product.setStock(product.getStock() - quantity);
-
-        return shoppingCartRepository.save(cart);
+    // Verificar si el size es null
+    if (size == null) {
+        throw new IllegalArgumentException("El tamaño (size) no puede ser nulo.");
     }
+
+    // Verificar si hay suficiente stock
+    if (product.getStock() < quantity) {
+        throw new IllegalArgumentException("No hay suficiente stock para el producto: " + product.getModel());
+    }
+
+    // Busca si el producto ya está en el carrito
+    CartItem item = cart.getItems().stream()
+        .filter(i -> i.getProduct().getId().equals(product.getId()) && i.getSize() == size)  // Considerar también el size
+        .findFirst()
+        .orElse(null);
+
+    if (item == null) {
+        // Si el producto no está en el carrito, añade uno nuevo con la cantidad especificada
+        item = new CartItem();
+        item.setProduct(product);
+        item.setQuantity(quantity);
+        item.setSize(size);  // Aquí asignamos el size correctamente
+        item.setShoppingCart(cart);
+        cart.getItems().add(item);
+    } else {
+        // Si el producto ya está en el carrito, actualiza la cantidad
+        item.setQuantity(item.getQuantity() + quantity);
+    }
+
+    // Restar la cantidad del stock del producto
+    product.setStock(product.getStock() - quantity);
+
+    // Actualizar el total del carrito
+    cart.setTotalPrice(cart.getItems().stream()
+        .mapToDouble(i -> i.getProduct().getPrice() * i.getQuantity())
+        .sum());
+
+    return shoppingCartRepository.save(cart);
+}
 
     @Override
     public ShoppingCart updateProductInCart(Long userId, Product product) {
@@ -97,5 +109,17 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cart.setUser(userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Usuario no encontrado")));
         return shoppingCartRepository.save(cart);
     }
+
+
+
+
+
+
+
+    
+
+
+
+
 
 }

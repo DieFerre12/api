@@ -23,7 +23,7 @@ public interface ProductService {
 
     public Optional<Product> getProductById(Long productId);
     
-    public void deleteProduct(Long productId);
+    public void deleteProduct(String model);
     
     public Product updateProductSize(String model,Size size, Integer stock) throws InsufficientStockException;
     
@@ -34,6 +34,8 @@ public interface ProductService {
     CategoryType categoryType, Brand brand, Size size) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException;
 
     public List<Product> findByCategoryType(CategoryType categoryType);
+
+    public List<Product> getProductByModel(String model);
 
 
 }
