@@ -37,7 +37,9 @@ public class SecurityConfig {
                                         .requestMatchers("/categories/").hasAnyAuthority("ADMIN") 
                                         .requestMatchers("/ShoppingCart/").hasAnyAuthority("ADMIN")
                                         .requestMatchers("/ShoppingCart/user/**").hasAnyAuthority("USER", "ADMIN")
-                                        .requestMatchers("/order/create").hasAnyAuthority("USER", "ADMIN")
+                                        .requestMatchers(HttpMethod.GET,"/order/**").hasAnyAuthority("ADMIN")
+                                        .requestMatchers("/order/create/").hasAnyAuthority("USER", "ADMIN")
+                                        .requestMatchers("/image/**").hasAnyAuthority("ADMIN")
                                                 
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

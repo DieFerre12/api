@@ -51,27 +51,5 @@ public class ShoppingCart {
     }
 
 
-    public void addProduct(Product product, int quantity) {
-        CartItem existingItem = items.stream()
-            .filter(item -> item.getProduct().getId().equals(product.getId()))
-            .findFirst()
-            .orElse(null);
-
-        if (existingItem != null) {
-            existingItem.setQuantity(existingItem.getQuantity() + quantity);
-        } else {
-            CartItem newItem = new CartItem();
-            newItem.setProduct(product);
-            newItem.setQuantity(quantity);
-            newItem.setShoppingCart(this);
-            items.add(newItem);
-        }
-        updateTotalPrice();
-    }
-
-    public void updateTotalPrice() {
-        this.totalPrice = items.stream()
-            .mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity())
-            .sum();
-    }
+    
 }
