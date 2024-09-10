@@ -34,7 +34,6 @@ public class CategoriesController {
             return ResponseEntity.ok(categoryService.getCategories(PageRequest.of(0, Integer.MAX_VALUE)));
         Page<Category> categoriesPage = categoryService.getCategories(PageRequest.of(page, size));
     
-        // Devuelve el ID como el CategoryType en la respuesta
         return ResponseEntity.ok(categoriesPage.map(category -> {
             Category responseCategory = new Category();
             responseCategory.setId(category.getId());

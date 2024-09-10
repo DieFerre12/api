@@ -46,7 +46,6 @@ public class ProductServiceImpl implements ProductService {
 
         // Eliminar el producto
         for (Product product : products) {
-            // Eliminar los CartItem asociados
             List<CartItem> cartItems = cartItemRepository.findByProduct(product);
             cartItemRepository.deleteAll(cartItems);
 

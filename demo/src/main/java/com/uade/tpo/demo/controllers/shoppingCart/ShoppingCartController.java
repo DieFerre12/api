@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.demo.controllers.user.UserResponse;
@@ -74,7 +75,7 @@ public ResponseEntity<?> addProductToCart(
         @PathVariable Long userId,
         @RequestBody ShoppingCartRequest.ProductRequest productCart) {
     
-    
+    // Busca el producto por el modelo
     List<Product> products = productService.getProductByModel(productCart.getModel());
     if (products.isEmpty()) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado con modelo: " + productCart.getModel());
@@ -82,6 +83,7 @@ public ResponseEntity<?> addProductToCart(
     
     Product product = products.get(0);
     
+    // Verificar la cantidad
     if (productCart.getQuantity() <= 0) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La cantidad debe ser mayor que cero.");
     }
@@ -93,6 +95,7 @@ public ResponseEntity<?> addProductToCart(
     // Agrega el producto al carrito con la cantidad especificada
     ShoppingCart cart = shoppingCartService.addProductToCart(userId, product, productCart.getQuantity(), productCart.getModel(), productCart.getSize());
 
+    // Prepara la respuesta
     ShoppingCartRequest response = new ShoppingCartRequest();
     response.setId(cart.getId());
     response.setTotalPrice(cart.getTotalPrice());
