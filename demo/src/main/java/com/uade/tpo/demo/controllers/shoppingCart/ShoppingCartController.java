@@ -34,7 +34,7 @@ public class ShoppingCartController {
     private ProductService productService;
 
     
-    @GetMapping
+    @GetMapping("/getAll")
     public List<ShoppingCart> getAllCarts() {
         return shoppingCartService.getAllCarts();
     }
@@ -109,8 +109,6 @@ public ResponseEntity<?> addProductToCart(
         item.getQuantity()
     ))
     .toList();
-
-
     response.setProducts(productResponses);
 
     return ResponseEntity.ok(response);
