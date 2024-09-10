@@ -1,13 +1,7 @@
 package com.uade.tpo.demo.controllers.product;
 
 import java.net.URI;
-import java.sql.SQLException;
-import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
-
-import javax.sql.rowset.serial.SerialBlob;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.uade.tpo.demo.entity.Category.CategoryType;
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.entity.Size;
@@ -31,8 +23,6 @@ import com.uade.tpo.demo.exceptions.InvalidPriceException;
 import com.uade.tpo.demo.exceptions.InvalidProductDataException;
 import com.uade.tpo.demo.repository.ProductRepository;
 import com.uade.tpo.demo.service.product.ProductService;
-
-import io.jsonwebtoken.io.IOException;
 
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -67,7 +57,6 @@ public class ProductController {
             productService.deleteProduct(model);
             return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
-            // Manejo del error en caso de que el producto no se encuentre
             return ResponseEntity.ok("Product deleted successfully.");
         }
     }
@@ -83,7 +72,7 @@ public class ProductController {
                 productRequest.getImage(),
                 productRequest.getPrice(),
                 productRequest.getStock(),
-                productRequest.getCategoryType(), // Pasar el CategoryType
+                productRequest.getCategoryType(),
                 productRequest.getBrand(),
                 productRequest.getSize());
         return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
@@ -110,7 +99,6 @@ public class ProductController {
     @PutMapping("/{model}") // CAMBIA PRECIO DE PRODUCTO
 public ResponseEntity<?> updateProductPrice(@PathVariable String model, @RequestBody ProductRequest productRequest) {
     try {
-        // Verifica si el precio es válido (puedes ajustar la lógica de validación según tus necesidades)
         if (productRequest.getPrice() <= 0) {
             throw new InvalidPriceException("El precio es inválido");
         }
@@ -120,16 +108,14 @@ public ResponseEntity<?> updateProductPrice(@PathVariable String model, @Request
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado");
         }
 
-        // Si quieres actualizar todos los productos que tienen ese modelo:
         products.forEach(product -> {
             product.setPrice(productRequest.getPrice());
             productRepository.save(product);
         });
 
-        return ResponseEntity.ok(products.get(0)); // Devuelve el primer producto actualizado
+        return ResponseEntity.ok(products.get(0)); 
 
     } catch (InvalidPriceException e) {
-        // Devuelve un error 400 (Bad Request) con el mensaje de la excepción
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

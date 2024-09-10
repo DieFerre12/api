@@ -1,7 +1,5 @@
 package com.uade.tpo.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,7 +24,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)  // Guarda el nombre del enum como un String en la base de datos
+    @Enumerated(EnumType.STRING) 
     @Column
     private CategoryType categoryType;
 

@@ -1,7 +1,5 @@
 package com.uade.tpo.demo.entity;
 
-import java.sql.Blob;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

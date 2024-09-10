@@ -36,7 +36,6 @@ public OrderResponse createOrder(Long id, String paymentMethod, String orderDate
 
     ShoppingCart cart = getShoppingCart(id);
 
-    // Verificar si el carrito está vacío
     if (cart.getItems().isEmpty()) {
         throw new IllegalArgumentException("El carrito está vacío. No se puede generar una orden.");
     }
@@ -49,14 +48,12 @@ public OrderResponse createOrder(Long id, String paymentMethod, String orderDate
 
     // Vaciar el carrito y borrar el total
     shoppingCartService.clearCartByUserId(id);
-    // Opcional: Borra el total del carrito si es necesario
+    // Borra el total del carrito si es necesario
     cart.setTotalPrice(0.0); // Resetea el total a 0
      // Asegúrate de tener un método para actualizar el carrito
 
     return buildOrderResponse(order);
-}
-
-
+    }
 
     @Override
     public Order getOrderById(Long orderId) {

@@ -10,11 +10,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import com.uade.tpo.demo.entity.Category.CategoryType;
 import com.uade.tpo.demo.entity.Product;
-import com.uade.tpo.demo.entity.ShoppingCart;
 import com.uade.tpo.demo.entity.Brand;
 import com.uade.tpo.demo.entity.CartItem;
 import com.uade.tpo.demo.entity.Category;
-import com.uade.tpo.demo.entity.Image;
 import com.uade.tpo.demo.entity.Size;
 import com.uade.tpo.demo.exceptions.InsufficientStockException;
 import com.uade.tpo.demo.exceptions.InvalidPriceException;
@@ -52,7 +50,6 @@ public class ProductServiceImpl implements ProductService {
             List<CartItem> cartItems = cartItemRepository.findByProduct(product);
             cartItemRepository.deleteAll(cartItems);
 
-            // Eliminar el producto
             productRepository.delete(product);
     }
     }
@@ -116,7 +113,6 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
         // Actualiza el producto encontrado
-        
         product.setStock(stock);
         return productRepository.save(product);
     }
@@ -132,13 +128,13 @@ public class ProductServiceImpl implements ProductService {
         throw new RuntimeException("Producto no encontrado");
     }
 
-    // Actualizar todos los productos que tienen ese modelo
+    // Actualizar los productos que tienen ese modelo
     products.forEach(product -> {
         product.setPrice(price);
         productRepository.save(product);
     });
 
-    return products; // Retorna la lista de productos actualizado
+    return products;
             
     }
 

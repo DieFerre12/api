@@ -11,6 +11,6 @@ import com.uade.tpo.demo.entity.Category.CategoryType;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    Optional<Category> findByCategoryType(CategoryType categoryType);  // Corregido el nombre del método
+    Optional<Category> findByCategoryType(CategoryType categoryType);  
 
 }
