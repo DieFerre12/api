@@ -7,5 +7,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 //por ejemplo, intentar agregar ropa en lugar de zapatillas
 
 @ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "El tipo de artículo no es soportado")
-public class UnsupportedProductTypeException extends Exception {
+public class UnsupportedProductTypeException extends RuntimeException {
+    public UnsupportedProductTypeException (String message) {
+        super(message);
+    }
 }

@@ -14,6 +14,7 @@ import com.uade.tpo.demo.entity.ShoppingCart;
 import com.uade.tpo.demo.entity.Brand;
 import com.uade.tpo.demo.entity.CartItem;
 import com.uade.tpo.demo.entity.Category;
+import com.uade.tpo.demo.entity.Image;
 import com.uade.tpo.demo.entity.Size;
 import com.uade.tpo.demo.exceptions.InsufficientStockException;
 import com.uade.tpo.demo.exceptions.InvalidPriceException;
@@ -68,7 +69,7 @@ public class ProductServiceImpl implements ProductService {
             throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
 
         if (description == null || description.isEmpty()) {
-            throw new InvalidProductDataException();
+            throw new InvalidProductDataException("Los datos son inválidos o incompletos");
         }
         if (price == null || price <= 0) {
             throw new InvalidPriceException("Precio invalido");
@@ -84,7 +85,6 @@ public class ProductServiceImpl implements ProductService {
                 .description(description)
                 .model(model)
                 .genre(genre)
-                .image(image)
                 .price(price)
                 .stock(stock)
                 .category(category)  
