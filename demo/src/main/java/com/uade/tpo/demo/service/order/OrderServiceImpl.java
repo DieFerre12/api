@@ -91,8 +91,8 @@ public OrderResponse createOrder(Long id, String paymentMethod, String orderDate
         Order order = new Order();
         order.setUser(cart.getUser());
         order.setPaymentMethod(paymentMethod);
+        
         try {
-            // Cambiar a formato Timestamp
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date parsedDate = dateFormat.parse(orderDate);
             Timestamp timestamp = new Timestamp(parsedDate.getTime());
@@ -100,6 +100,8 @@ public OrderResponse createOrder(Long id, String paymentMethod, String orderDate
         } catch (ParseException e) {
             throw new IllegalArgumentException("Formato de fecha no válido. Use 'yyyy-MM-dd'.");
         }
+    
+        // Establecer detalles de la orden
         order.setDetails(cart.getItems().stream().map(item -> {
             Detail detail = new Detail();
             detail.setOrder(order);
@@ -109,8 +111,16 @@ public OrderResponse createOrder(Long id, String paymentMethod, String orderDate
             return detail;
         }).toList());
     
+        // Asignar un descuento si corresponde (ejemplo: 10% si pago en efectivo)
+        if (paymentMethod.equalsIgnoreCase(CASH)) {
+            order.setDiscount(order.getTotalPrice() * 0.10);
+        } else {
+            order.setDiscount(0.0); // No hay descuento
+        }
+    
         return order;
     }
+    
 
     private OrderResponse buildOrderResponse(Order order) {
         OrderResponse response = new OrderResponse();
@@ -120,6 +130,10 @@ public OrderResponse createOrder(Long id, String paymentMethod, String orderDate
         response.setPaymentMethod(order.getPaymentMethod());
         response.setUserName(order.getUser().getFirstName() + " " + order.getUser().getLastName());
         
+        // Asignar el descuento de la orden a la respuesta
+        response.setDiscount(order.getDiscount());
+    
+        // Construir detalles de productos
         List<OrderResponse.ProductDetail> productDetails = order.getDetails().stream()
                 .map(detail -> {
                     OrderResponse.ProductDetail productDetail = new OrderResponse.ProductDetail();
@@ -135,6 +149,7 @@ public OrderResponse createOrder(Long id, String paymentMethod, String orderDate
         
         return response;
     }
+    
     
     
 }

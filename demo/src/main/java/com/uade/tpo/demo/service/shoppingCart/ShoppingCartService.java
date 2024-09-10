@@ -26,6 +26,8 @@ public interface ShoppingCartService {
    public double calculateTotalPrice(Long userId);
 
     public ShoppingCart createCart(Long userId);
+    
+    void updateProductStock(Product product);
 
       
     

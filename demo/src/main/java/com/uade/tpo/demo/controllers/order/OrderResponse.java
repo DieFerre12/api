@@ -11,6 +11,7 @@ public class OrderResponse {
     private String paymentMethod;
     private String userName;
     private List<ProductDetail> products;
+    private Double discount;
     private Double totalPrice;
 
     @Data

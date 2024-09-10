@@ -28,7 +28,7 @@ public class SecurityConfig {
                 http
                                 .csrf(AbstractHttpConfigurer::disable)
                                 .authorizeHttpRequests(req -> req
-                                        .requestMatchers("/api/v1/auth/").permitAll() 
+                                        .requestMatchers("/api/v1/auth/**").permitAll() 
                                         .requestMatchers("/admin/").hasRole("ADMIN") 
                                         .requestMatchers("/user/").hasRole("USER") 
                                         .requestMatchers("/users/").hasRole("ADMIN") 
@@ -38,6 +38,8 @@ public class SecurityConfig {
                                         .requestMatchers(HttpMethod.GET,"/categories/").hasAnyAuthority("USER", "ADMIN")
                                         .requestMatchers("/categories/").hasAnyAuthority("ADMIN") 
                                         .requestMatchers("/ShoppingCart/").hasAnyAuthority("ADMIN")
+                                        .requestMatchers(HttpMethod.GET,"/ShoppingCart/user/**").hasAnyAuthority("USER", "ADMIN")
+                                        .requestMatchers(HttpMethod.DELETE, "/shoppingCart/user/{userId}/removeProduct/{model}/{size}/").hasRole("ADMIN")
                                         .requestMatchers("/ShoppingCart/user/**").hasAnyAuthority("USER", "ADMIN")
                                         .requestMatchers(HttpMethod.GET,"/order/**").hasAnyAuthority("ADMIN")
                                         .requestMatchers("/order/create/").hasAnyAuthority("USER", "ADMIN")
