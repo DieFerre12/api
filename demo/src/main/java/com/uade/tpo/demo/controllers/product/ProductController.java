@@ -88,7 +88,7 @@ public class ProductController {
                 productRequest.getSize());
         return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
     }
-
+ 
     @PutMapping("/{model}/{size}") // CAMBIA STOCK DE CADA TALLE
     public ResponseEntity<Product> updateProductSize(@PathVariable String model, @PathVariable Size size, @RequestBody ProductRequest productRequest) {
         try {
