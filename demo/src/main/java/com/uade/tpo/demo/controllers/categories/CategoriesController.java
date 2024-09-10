@@ -1,7 +1,5 @@
 package com.uade.tpo.demo.controllers.categories;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,7 +34,7 @@ public class CategoriesController {
             return ResponseEntity.ok(categoryService.getCategories(PageRequest.of(0, Integer.MAX_VALUE)));
         Page<Category> categoriesPage = categoryService.getCategories(PageRequest.of(page, size));
     
-        // Devolver tanto el ID como el CategoryType en la respuesta
+        // Devuelve el ID como el CategoryType en la respuesta
         return ResponseEntity.ok(categoriesPage.map(category -> {
             Category responseCategory = new Category();
             responseCategory.setId(category.getId());

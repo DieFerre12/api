@@ -33,14 +33,12 @@ public class Detail {
     private int amount;
 
 
-
-    // Relación con la entidad `Order`
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     @JsonBackReference
     private Order order;
 
-    // Relación con la entidad `Product`
+    
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @JsonManagedReference

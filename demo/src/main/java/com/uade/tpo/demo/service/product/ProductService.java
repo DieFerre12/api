@@ -6,10 +6,7 @@ import java.util.Optional;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.uade.tpo.demo.entity.Brand;
-import com.uade.tpo.demo.entity.Category;
 import com.uade.tpo.demo.entity.Category.CategoryType;
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.entity.Size;

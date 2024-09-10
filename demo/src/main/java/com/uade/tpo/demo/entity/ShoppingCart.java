@@ -18,7 +18,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.uade.tpo.demo.entity.CartItem;
 
 @Entity
 @Data

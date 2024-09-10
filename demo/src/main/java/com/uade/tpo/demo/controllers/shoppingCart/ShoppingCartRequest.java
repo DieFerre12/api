@@ -3,7 +3,6 @@ package com.uade.tpo.demo.controllers.shoppingCart;
 import java.util.List;
 
 import com.uade.tpo.demo.controllers.user.UserResponse;
-import com.uade.tpo.demo.entity.CartItem;
 import com.uade.tpo.demo.entity.Size;
 
 import lombok.AllArgsConstructor;
