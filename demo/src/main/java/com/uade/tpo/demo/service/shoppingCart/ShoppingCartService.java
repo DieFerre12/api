@@ -17,13 +17,16 @@ public interface ShoppingCartService {
 
    public ShoppingCart addProductToCart(Long userId, Product product, int quantity, String model, Size size);
 
-   public ShoppingCart updateProductInCart(Long userId, Product product);
+   public ShoppingCart updateProductInCart(Long userId, Product product, int quantity,Size size,String model);
 
-   public void removeProductFromCart(Long userId, Long productId);
+   public void removeProductFromCart(Long userId, Size size, String model);
 
    public void clearCartByUserId(Long userId);
 
    public double calculateTotalPrice(Long userId);
 
     public ShoppingCart createCart(Long userId);
+
+      
+    
 }

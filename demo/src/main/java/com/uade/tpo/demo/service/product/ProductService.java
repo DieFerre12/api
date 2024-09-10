@@ -37,6 +37,8 @@ public interface ProductService {
 
     public List<Product> getProductByModel(String model);
 
+    public Optional<Product> getProductByModelAndSize(String model, Size size);
+
 
 }
 

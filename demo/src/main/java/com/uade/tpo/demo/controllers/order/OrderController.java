@@ -23,7 +23,6 @@ public class OrderController {
         return orderService.createOrder(orderRequest.getId(), orderRequest.getPaymentMethod(), orderRequest.getOrderDate());
     }
 
-
     @GetMapping("/{orderId}")
     public Order getOrderById(@PathVariable Long orderId) {
         return orderService.getOrderById(orderId);

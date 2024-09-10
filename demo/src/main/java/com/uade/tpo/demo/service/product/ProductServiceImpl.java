@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import com.uade.tpo.demo.entity.Category.CategoryType;
 import com.uade.tpo.demo.entity.Product;
+import com.uade.tpo.demo.entity.ShoppingCart;
 import com.uade.tpo.demo.entity.Brand;
 import com.uade.tpo.demo.entity.CartItem;
 import com.uade.tpo.demo.entity.Category;
@@ -150,9 +151,9 @@ public class ProductServiceImpl implements ProductService {
     return products;
     }
 
-   
-
-
+    public Optional<Product> getProductByModelAndSize(String model, Size size) {
+        return productRepository.findByModelAndSize(model, size);
+    }
 }
 
 

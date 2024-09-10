@@ -28,21 +28,19 @@ public class SecurityConfig {
                 http
                                 .csrf(AbstractHttpConfigurer::disable)
                                 .authorizeHttpRequests(req -> req
-                                                .requestMatchers("/api/v1/auth/**").permitAll() // Rutas de autenticación
-                                                .requestMatchers("/error/**").permitAll() // Rutas de error
-                                                .requestMatchers("/admin/**").hasRole("ADMIN") // Rutas administrativas solo para ADMIN
-                                                .requestMatchers("/public/**").permitAll() // Rutas públicas
-
-                                                .requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN") // Rutas de usuario
-                                                .requestMatchers("/order/**").hasAnyAuthority("USER", "ADMIN") // Rutas de orden
+                                        .requestMatchers("/api/v1/auth/").permitAll() 
+                                        .requestMatchers("/admin/").hasRole("ADMIN") 
+                                        .requestMatchers("/user/").hasRole("USER") 
+                                        .requestMatchers("/users/").hasRole("ADMIN") 
+                                        .requestMatchers("/order/").hasAnyAuthority("USER", "ADMIN") 
+                                        .requestMatchers(HttpMethod.GET,"/products/").hasAnyAuthority("USER", "ADMIN")
+                                        .requestMatchers("/products/").hasAnyAuthority("ADMIN") 
+                                        .requestMatchers(HttpMethod.GET,"/categories/").hasAnyAuthority("USER", "ADMIN")
+                                        .requestMatchers("/categories/").hasAnyAuthority("ADMIN") 
+                                        .requestMatchers("/ShoppingCart/").hasAnyAuthority("ADMIN")
+                                        .requestMatchers("/ShoppingCart/user/**").hasAnyAuthority("USER", "ADMIN")
+                                        .requestMatchers("/order/create").hasAnyAuthority("USER", "ADMIN")
                                                 
-                                                .requestMatchers("/products/new**").permitAll() 
-
-                                                .requestMatchers("/categories/**").permitAll() // Rutas de categorías para usuarios
-
-                                                .requestMatchers("/ShoppingCart/**").permitAll()
-                                                
-
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                                 .authenticationProvider(authenticationProvider)

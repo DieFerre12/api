@@ -17,4 +17,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findByModelAndSize(String model, Size size);
     
     List<Product> findByModel(String model);
+
+    
 }

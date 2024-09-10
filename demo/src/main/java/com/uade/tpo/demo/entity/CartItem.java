@@ -1,7 +1,6 @@
 package com.uade.tpo.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.uade.tpo.demo.service.cartItem.CartItemService;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

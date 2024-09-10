@@ -116,28 +116,39 @@ public ResponseEntity<?> addProductToCart(
     return ResponseEntity.ok(response);
 }
 
-    @PutMapping("/user/{userId}/updateProduct")
-    public ResponseEntity<?> updateProductInCart(@PathVariable Long userId, @RequestBody ShoppingCartRequest.ProductRequest productCart) {
-        List<Product> productOptional = productService.getProductByModel(productCart.getModel());
-       for (Product product : productOptional) {
-            if (product.getModel().equals(productCart.getModel())) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado con modelo: " + productCart.getModel());
-            }
-            if (productCart.getQuantity() <= 0) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La cantidad debe ser mayor que cero.");
-            }
-            if (productCart.getQuantity() > product.getStock()) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("Cantidad solicitada excede el stock disponible.");
-            }
-        }
+@PutMapping("/user/{userId}/updateProduct")
+public ResponseEntity<?> updateProductInCart(
+        @PathVariable Long userId,
+        @RequestBody ShoppingCartRequest.ProductRequest productCart) {
 
-        ShoppingCart cart = shoppingCartService.updateProductInCart(userId, productOptional.get(0));
-        return ResponseEntity.ok(cart);
+    // Buscar el producto por el modelo
+    List<Product> products = productService.getProductByModel(productCart.getModel());
+
+    // Verificar si el producto existe
+    if (products.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado con modelo: " + productCart.getModel());
     }
 
-    @DeleteMapping("/user/{userId}/removeProduct/{productId}")
-    public ResponseEntity<?> removeProductFromCart(@PathVariable Long userId, @PathVariable Long productId) {
-        shoppingCartService.removeProductFromCart(userId, productId);
+    Product product = products.get(0);
+
+    // Validar la cantidad
+    if (productCart.getQuantity() <= 0) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La cantidad debe ser mayor que cero.");
+    }
+
+    if (productCart.getQuantity() > product.getStock()) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Cantidad solicitada excede el stock disponible.");
+    }
+
+    // Actualizar el producto en el carrito
+    ShoppingCart cart = shoppingCartService.updateProductInCart(userId, product, productCart.getQuantity(), productCart.getSize(), productCart.getModel());
+
+    return ResponseEntity.ok(cart);
+}
+
+    @DeleteMapping("/user/{userId}/removeProduct/{model}/{size}")
+    public ResponseEntity<?> removeProductFromCart(@PathVariable Long userId, @PathVariable String model, @PathVariable Size size) {
+        shoppingCartService.removeProductFromCart(userId, size, model);
         return ResponseEntity.ok("Producto eliminado del carrito.");
     }
 

@@ -31,19 +31,31 @@ public class OrderServiceImpl implements OrderService {
     private ShoppingCartService shoppingCartService;
 
     @Override
-    public OrderResponse createOrder(Long id, String paymentMethod, String orderDate) {
-        validatePaymentMethod(paymentMethod);
+public OrderResponse createOrder(Long id, String paymentMethod, String orderDate) {
+    validatePaymentMethod(paymentMethod);
 
-        ShoppingCart cart = getShoppingCart(id);
-        Order order = buildOrder(cart, paymentMethod, orderDate);
-        double finalTotal = calculateTotal(cart.getTotalPrice(), paymentMethod);
+    ShoppingCart cart = getShoppingCart(id);
 
-        order.setTotalPrice(finalTotal);
-        order = orderRepository.save(order);
-        shoppingCartService.clearCartByUserId(id);
-
-        return buildOrderResponse(order);
+    // Verificar si el carrito está vacío
+    if (cart.getItems().isEmpty()) {
+        throw new IllegalArgumentException("El carrito está vacío. No se puede generar una orden.");
     }
+
+    Order order = buildOrder(cart, paymentMethod, orderDate);
+    double finalTotal = calculateTotal(cart.getTotalPrice(), paymentMethod);
+
+    order.setTotalPrice(finalTotal);
+    order = orderRepository.save(order);
+
+    // Vaciar el carrito y borrar el total
+    shoppingCartService.clearCartByUserId(id);
+    // Opcional: Borra el total del carrito si es necesario
+    cart.setTotalPrice(0.0); // Resetea el total a 0
+     // Asegúrate de tener un método para actualizar el carrito
+
+    return buildOrderResponse(order);
+}
+
 
 
     @Override
