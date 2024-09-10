@@ -25,32 +25,34 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String description;
 
-    @Column
+    @Column(nullable = false)
     private String model;
 
-    @Column
+    @Column(nullable = false)
     private String genre;
 
     @ManyToOne
-    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    @JoinColumn(name = "image_id", referencedColumnName = "id", nullable = false)
     private Image image;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Brand brand;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Size size;
 
-    @Column
+    @Column(nullable = false)
     private Integer stock;
 
-    @Column
+    @Column(nullable = false)
     private Double price;
 
     @ManyToOne
-    @JoinColumn(name = "categoryType", referencedColumnName = "id")
+    @JoinColumn(name = "categoryType", referencedColumnName = "id", nullable = false)
     private Category category;
 }

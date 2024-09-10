@@ -26,25 +26,25 @@ public class Order  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column
+
+    @Column(nullable = false)
     private Timestamp orderDate;
 
-    @Column
-    private String paymentMethod; 
+    @Column(nullable = false)
+    private String paymentMethod;
 
-    @Column
+    @Column(nullable = false)
     private Double discount;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     @JsonBackReference
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<Detail> details;
 
-    @Column
+    @Column(nullable = false)
     private Double totalPrice;
-
 }
+
