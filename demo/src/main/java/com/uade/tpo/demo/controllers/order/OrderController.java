@@ -1,6 +1,8 @@
 package com.uade.tpo.demo.controllers.order;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,5 +28,10 @@ public class OrderController {
     @GetMapping("/{orderId}")
     public Order getOrderById(@PathVariable Long orderId) {
         return orderService.getOrderById(orderId);
+    }
+    @DeleteMapping("/deleteAll")
+    public ResponseEntity<String> deleteAllOrders() {
+        orderService.deleteAllOrders();
+        return ResponseEntity.ok("Todas las órdenes han sido eliminadas exitosamente.");
     }
 }

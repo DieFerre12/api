@@ -141,7 +141,21 @@ public ResponseEntity<?> updateProductInCart(
     // Actualizar el producto en el carrito
     ShoppingCart cart = shoppingCartService.updateProductInCart(userId, product, productCart.getQuantity(), productCart.getSize(), productCart.getModel());
 
-    return ResponseEntity.ok(cart);
+    // Preparar la respuesta
+    ShoppingCartRequest response = ShoppingCartRequest.builder()
+        .id(cart.getId())
+        .totalPrice(cart.getTotalPrice())
+        .userResponse(new UserResponse(cart.getUser().getEmail(), cart.getUser().getFirstName(), cart.getUser().getLastName()))
+        .products(cart.getItems().stream()
+            .map(item -> new ShoppingCartRequest.ProductRequest(
+                item.getSize(), 
+                item.getProduct().getModel(),
+                item.getProduct().getPrice(),
+                item.getQuantity()))
+            .toList())
+        .build();
+
+    return ResponseEntity.ok(response);
 }
 
     @DeleteMapping("/user/{userId}/removeProduct/{model}/{size}")

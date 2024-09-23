@@ -7,4 +7,5 @@ public interface OrderService {
     OrderResponse createOrder(Long id, String paymentMethod, String orderDate);
     Order getOrderById(Long orderId);
     double calculateTotal(double baseAmount, String paymentMethod);
+    void deleteAllOrders();
 }

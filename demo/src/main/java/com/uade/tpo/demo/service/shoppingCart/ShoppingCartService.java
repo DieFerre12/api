@@ -9,8 +9,6 @@ import java.util.Optional;
 
 public interface ShoppingCartService {
 
-
-
    public List<ShoppingCart> getAllCarts();
 
    public Optional<ShoppingCart> getCartByUserId(Long userId);
@@ -28,7 +26,4 @@ public interface ShoppingCartService {
     public ShoppingCart createCart(Long userId);
     
     void updateProductStock(Product product);
-
-      
-    
 }

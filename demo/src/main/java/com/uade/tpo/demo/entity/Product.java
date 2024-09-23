@@ -35,7 +35,7 @@ public class Product {
     private String genre;
 
     @ManyToOne
-    @JoinColumn(name = "image_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
     private Image image;
 
     @Enumerated(EnumType.STRING)

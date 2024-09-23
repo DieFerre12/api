@@ -31,29 +31,29 @@ public class OrderServiceImpl implements OrderService {
     private ShoppingCartService shoppingCartService;
 
     @Override
-public OrderResponse createOrder(Long id, String paymentMethod, String orderDate) {
-    validatePaymentMethod(paymentMethod);
+    public OrderResponse createOrder(Long id, String paymentMethod, String orderDate) {
+        validatePaymentMethod(paymentMethod);
 
-    ShoppingCart cart = getShoppingCart(id);
+        ShoppingCart cart = getShoppingCart(id);
 
-    if (cart.getItems().isEmpty()) {
-        throw new IllegalArgumentException("El carrito está vacío. No se puede generar una orden.");
-    }
+        if (cart.getItems().isEmpty()) {
+            throw new IllegalArgumentException("El carrito está vacío. No se puede generar una orden.");
+        }
 
-    Order order = buildOrder(cart, paymentMethod, orderDate);
-    double finalTotal = calculateTotal(cart.getTotalPrice(), paymentMethod);
+        Order order = buildOrder(cart, paymentMethod, orderDate);
+        double finalTotal = calculateTotal(cart.getTotalPrice(), paymentMethod);
 
-    order.setTotalPrice(finalTotal);
-    order = orderRepository.save(order);
+        order.setTotalPrice(finalTotal);
+        order = orderRepository.save(order);
 
-    // Vaciar el carrito y borrar el total
-    shoppingCartService.clearCartByUserId(id);
-    // Borra el total del carrito si es necesario
-    cart.setTotalPrice(0.0); // Resetea el total a 0
-     // Asegúrate de tener un método para actualizar el carrito
+        // Vaciar el carrito y borrar el total
+        shoppingCartService.clearCartByUserId(id);
+        // Borra el total del carrito si es necesario
+        cart.setTotalPrice(0.0); // Resetea el total a 0
+        // Asegúrate de tener un método para actualizar el carrito
 
-    return buildOrderResponse(order);
-    }
+        return buildOrderResponse(order);
+        }
 
     @Override
     public Order getOrderById(Long orderId) {
@@ -125,7 +125,7 @@ public OrderResponse createOrder(Long id, String paymentMethod, String orderDate
         response.setOrderId(order.getId());
         response.setOrderDate(new SimpleDateFormat("yyyy-MM-dd").format(order.getOrderDate()));
         response.setPaymentMethod(order.getPaymentMethod());
-        response.setUserName(order.getUser().getFirstName() + " " + order.getUser().getLastName());
+        response.setUserName(order.getUser().getFirstName() + " " + order.getUser().getEmail());
         
         // Asignar el descuento de la orden a la respuesta
         response.setDiscount(order.getDiscount());
@@ -145,6 +145,12 @@ public OrderResponse createOrder(Long id, String paymentMethod, String orderDate
         response.setTotalPrice(order.getTotalPrice());
         
         return response;
+    }
+    
+
+    @Override
+    public void deleteAllOrders() {
+      orderRepository.deleteAll();
     }
     
     
