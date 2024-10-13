@@ -34,6 +34,17 @@ public class ImagesController {
         return ResponseEntity.ok().body(ImageResponse.builder().file(encodedString).id(id).build());
     }
 
+    @GetMapping("/search/{name}")
+    public ResponseEntity<ImageResponse> findImageByName(@PathVariable("name") String name) {
+        Image image = imageService.findByName(name); // Asegúrate de que este método esté implementado
+        if (image == null) {
+            return ResponseEntity.notFound().build(); // Devuelve 404 si no se encuentra la imagen
+        }
+        // Utiliza el método para obtener la imagen en Base64
+        String encodedImage = image.getImageAsBase64(); // Obtiene la imagen en formato Base64
+        return ResponseEntity.ok().body(ImageResponse.builder().file(encodedImage).id(image.getId()).build());
+    }
+
     @PostMapping("/add")
     public String addImagePost(AddFileRequest request) throws IOException, SerialException, SQLException {
         byte[] bytes = request.getFile().getBytes();

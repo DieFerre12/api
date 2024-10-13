@@ -69,7 +69,7 @@ public class ProductController {
                 productRequest.getDescription(),
                 productRequest.getModel(),
                 productRequest.getGenre(),
-                productRequest.getImage(),
+                productRequest.getImageId(), 
                 productRequest.getPrice(),
                 productRequest.getStock(),
                 productRequest.getCategoryType(),

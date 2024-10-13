@@ -1,5 +1,6 @@
 package com.uade.tpo.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,8 +11,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.InputStream;
 import java.sql.Blob;
-import java.util.Date;
+import java.util.Base64;
 
 @Data
 @Entity
@@ -22,9 +24,22 @@ import java.util.Date;
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private Blob image;
 
-    private Date date = new Date();
+    private String name;  
+
+    @JsonProperty("image") 
+    public String getImageAsBase64() {
+        if (image != null) {
+            try (InputStream binaryStream = image.getBinaryStream()) {
+                byte[] bytes = binaryStream.readAllBytes();
+                return Base64.getEncoder().encodeToString(bytes);
+            } catch (Exception e) {
+                e.printStackTrace(); 
+            }
+        }
+        return null; 
+    }
 }

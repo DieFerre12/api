@@ -2,7 +2,6 @@ package com.uade.tpo.demo.service.product;
 
 import java.util.Optional;
 
-import java.sql.Blob;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +12,7 @@ import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.entity.Brand;
 import com.uade.tpo.demo.entity.CartItem;
 import com.uade.tpo.demo.entity.Category;
+import com.uade.tpo.demo.entity.Image;
 import com.uade.tpo.demo.entity.Size;
 import com.uade.tpo.demo.exceptions.InsufficientStockException;
 import com.uade.tpo.demo.exceptions.InvalidPriceException;
@@ -20,6 +20,7 @@ import com.uade.tpo.demo.exceptions.InvalidProductDataException;
 import com.uade.tpo.demo.repository.CartItemRepository;
 import com.uade.tpo.demo.repository.CategoryRepository;
 import com.uade.tpo.demo.repository.ProductRepository;
+import com.uade.tpo.demo.service.imageS.ImageService;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -32,6 +33,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private CartItemRepository cartItemRepository;
+
+    @Autowired
+    private ImageService imageService; 
 
     @Override
     public Optional<Product> getProductById(Long productId) {
@@ -60,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public Product createProduct(String description, String model, String genre, Blob image, Double price, Integer stock, 
+    public Product createProduct(String description, String model, String genre, Long imageId, Double price, Integer stock, 
                                 CategoryType categoryType, Brand brand, Size size) 
             throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
 
@@ -76,6 +80,16 @@ public class ProductServiceImpl implements ProductService {
 
         Category category = categoryRepository.findByCategoryType(categoryType)
                 .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
+        
+        Image image = null; // Inicializamos la imagen como null
+        if (imageId != null) {  // Si el imageId no es nulo, intentamos buscar la imagen
+            try {
+                image = imageService.viewById(imageId);
+            } catch (RuntimeException e) {
+                // Si no se encuentra la imagen, simplemente dejamos la imagen como null
+                System.out.println("Imagen no encontrada, se procederá sin imagen.");
+            }
+        }    
 
         Product product = Product.builder()
                 .description(description)
@@ -86,6 +100,7 @@ public class ProductServiceImpl implements ProductService {
                 .category(category)  
                 .brand(brand)
                 .size(size)
+                .image(image)
                 .build();
 
         return productRepository.save(product);

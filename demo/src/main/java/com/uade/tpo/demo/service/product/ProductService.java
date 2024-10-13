@@ -1,6 +1,5 @@
 package com.uade.tpo.demo.service.product;
 
-import java.sql.Blob;
 import java.util.Optional;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public interface ProductService {
     
     public List<Product> updateProductPrice(String model, Double price) throws InvalidPriceException;
 
-    public Product createProduct(String description, String model, String genre, Blob blob, Double price, Integer stock, 
+    public Product createProduct(String description, String model, String genre, Long imageId, Double price, Integer stock, 
 
     CategoryType categoryType, Brand brand, Size size) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException;
 
