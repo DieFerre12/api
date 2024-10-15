@@ -66,67 +66,62 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll(pageRequest);
     }
 
-
     @Override
-    public List<Product> createProduct(String description, String model, String genre, Long imageId, Double price,
-            Map<Size, Integer> sizeStockMap, CategoryType categoryType, Brand brand)
-            throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
-
+public List<Product> createProduct(String description, String model, String genre, Long imageId, Double price,
+        Map<Size, Integer> sizeStockMap, CategoryType categoryType, Brand brand)
+        throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
+    
         // Validaciones
         if (description == null || description.isEmpty()) {
             throw new InvalidProductDataException("Los datos son inválidos o incompletos");
         }
         if (price == null || price <= 0) {
-            throw new InvalidPriceException("Precio inválido");
+            throw new InvalidPriceException("Precio invalido");
         }
 
         // Obtener la categoría
         Category category = categoryRepository.findByCategoryType(categoryType)
-                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+                .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
+                List<Product> createdProducts = new ArrayList<>();
 
-                Image image = null; // Inicializamos la imagen como null
-                if (imageId != null) {  // Si el imageId no es nulo, intentamos buscar la imagen
-                    try {
-                        image = imageService.viewById(imageId);
-                    } catch (RuntimeException e) {
-                        // Si no se encuentra la imagen, simplemente dejamos la imagen como null
-                        System.out.println("Imagen no encontrada, se procederá sin imagen.");
-                    }
-                }
-
-
-
-        List<Product> createdProducts = new ArrayList<>();
-
-        // Crear un producto por cada talla y stock proporcionado
-        for (Map.Entry<Size, Integer> entry : sizeStockMap.entrySet()) {
-            Size size = entry.getKey();
-            Integer stock = entry.getValue();
-
-            if (stock == null || stock < 0) {
-                throw new InsufficientStockException();
+                // Inicializamos la imagen como null
+        Image image = null;
+        if (imageId != null) {
+            try {
+                image = imageService.viewById(imageId);
+            } catch (RuntimeException e) {
+                System.out.println("Imagen no encontrada, se procederá sin imagen.");
             }
+        }
+    // Crear un producto por cada talla y stock proporcionado
+    for (Map.Entry<Size, Integer> entry : sizeStockMap.entrySet()) {
+        Size size = entry.getKey();
+        Integer stock = entry.getValue();
 
-            // Crear el producto con la imagen asociada
-            Product product = Product.builder()
-                    .description(description)
-                    .model(model)
-                    .genre(genre)
-                    .image(image) // Usar la imagen creada
-                    .price(price)
-                    .stock(stock)
-                    .category(category)
-                    .brand(brand)
-                    .size(size)
-                    .build();
-
-            createdProducts.add(productRepository.save(product));
+        if (stock == null || stock < 0) {
+            throw new InsufficientStockException();
         }
 
-        return createdProducts;
+        // Crear el producto con la imagen asociada
+        Product product = Product.builder()
+                .description(description)
+                .model(model)
+                .genre(genre)
+                .image(image) // Asociar la imagen al producto
+                .price(price)
+                .stock(stock)
+                .category(category)
+                .brand(brand)
+                .size(size)
+                .build();
+
+        createdProducts.add(productRepository.save(product));
     }
 
+    return createdProducts;
+}
 
+    
 
     @Override
     public List<Product> findByCategoryType(CategoryType categoryType) {

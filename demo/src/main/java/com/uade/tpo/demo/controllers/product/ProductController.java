@@ -65,22 +65,22 @@ public class ProductController {
         }
     }
 
-
     @PostMapping("/new")
-    public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productRequest)
-            throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
-                List<Product> result = productService.createProduct(
-                    productRequest.getDescription(),
-                    productRequest.getModel(),
-                    productRequest.getGenre(),
-                    productRequest.getImageId(),
-                    productRequest.getPrice(),
-                    productRequest.getSize(),  // Pasar el mapa de tallas y stocks
-                    productRequest.getCategoryType(),
-                    productRequest.getBrand());
-                    return ResponseEntity.created(URI.create("/products/" + result.get(0).getId())).body(result);
-                }
- 
+    public ResponseEntity<List<Product>> createProduct(@RequestBody ProductRequest productRequest) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
+        List<Product> createdProducts = productService.createProduct(
+                productRequest.getDescription(),
+                productRequest.getModel(),
+                productRequest.getGenre(),
+                productRequest.getImageId(),
+                productRequest.getPrice(),
+                productRequest.getSize(),
+                productRequest.getCategoryType(),
+                productRequest.getBrand()
+        );
+    
+        return ResponseEntity.ok(createdProducts);
+    }
+    
     @PutMapping("/updateProductSize")
     public ResponseEntity<List<Product>> updateProductSize(@RequestBody ProductRequest productRequest) {
         List<Product> updatedProducts = new ArrayList<>();
