@@ -1,8 +1,9 @@
 package com.uade.tpo.demo.controllers.Imagen;
 
 import org.springframework.web.bind.annotation.RestController;
-import com.uade.tpo.demo.service.imageS.ImageService;
+
 import com.uade.tpo.demo.entity.Image;
+import com.uade.tpo.demo.service.images.ImageService;
 
 import java.io.IOException;
 import java.sql.Blob;

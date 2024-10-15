@@ -1,5 +1,7 @@
 package com.uade.tpo.demo.controllers.product;
 
+import java.util.Map;
+
 import com.uade.tpo.demo.entity.Brand;
 import com.uade.tpo.demo.entity.Size;
 import com.uade.tpo.demo.entity.Category.CategoryType;
@@ -12,7 +14,7 @@ public class ProductRequest {
     private String genre;
     private Long imageId;
     private Brand brand;
-    private Size size;
+    private Map<Size, Integer> size;  // Mapa de tallas y stock
     private Integer stock;
     private Double price;
     private CategoryType categoryType;

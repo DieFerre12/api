@@ -1,8 +1,10 @@
 package com.uade.tpo.demo.service.product;
 
 import java.util.Optional;
-
+import java.sql.Blob;
 import java.util.List;
+
+import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import com.uade.tpo.demo.entity.Brand;
@@ -25,9 +27,8 @@ public interface ProductService {
     
     public List<Product> updateProductPrice(String model, Double price) throws InvalidPriceException;
 
-    public Product createProduct(String description, String model, String genre, Long imageId, Double price, Integer stock, 
-
-    CategoryType categoryType, Brand brand, Size size) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException;
+    public List<Product> createProduct(String description, String model, String genre, Long imageId, Double price,
+        Map<Size, Integer> sizeStockMap, CategoryType categoryType, Brand brand) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException;
 
     public List<Product> findByCategoryType(CategoryType categoryType);
 

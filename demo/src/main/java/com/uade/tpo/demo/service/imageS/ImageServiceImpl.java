@@ -1,4 +1,4 @@
-package com.uade.tpo.demo.service.imageS;
+package com.uade.tpo.demo.service.images;
 
 import com.uade.tpo.demo.entity.Image;
 import com.uade.tpo.demo.repository.ImageRepository;

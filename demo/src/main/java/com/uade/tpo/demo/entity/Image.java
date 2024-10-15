@@ -1,11 +1,7 @@
 package com.uade.tpo.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,18 +24,21 @@ public class Image {
 
     private Blob image;
 
-    private String name;  
+    @Column(unique = true, nullable = false) 
+    private String model; 
 
-    @JsonProperty("image") 
+    private String name;
+
+    @JsonProperty("image")
     public String getImageAsBase64() {
         if (image != null) {
             try (InputStream binaryStream = image.getBinaryStream()) {
                 byte[] bytes = binaryStream.readAllBytes();
                 return Base64.getEncoder().encodeToString(bytes);
             } catch (Exception e) {
-                e.printStackTrace(); 
+                e.printStackTrace();
             }
         }
-        return null; 
+        return null;
     }
 }
