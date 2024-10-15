@@ -27,8 +27,8 @@ public interface ProductService {
     
     public List<Product> updateProductPrice(String model, Double price) throws InvalidPriceException;
 
-    public List<Product> createProduct(String description, String model, String genre, Long imageId, Double price,
-        Map<Size, Integer> sizeStockMap, CategoryType categoryType, Brand brand) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException;
+    public List<Product> createProduct(String description, String model, String genre, Blob image, Double price,
+    Map<Size, Integer> sizeStockMap, CategoryType categoryType, Brand brand) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException;
 
     public List<Product> findByCategoryType(CategoryType categoryType);
 

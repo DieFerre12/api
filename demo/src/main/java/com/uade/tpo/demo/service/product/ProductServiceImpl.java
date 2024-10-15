@@ -66,62 +66,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll(pageRequest);
     }
 
-    @Override
-public List<Product> createProduct(String description, String model, String genre, Long imageId, Double price,
-        Map<Size, Integer> sizeStockMap, CategoryType categoryType, Brand brand)
-        throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
-    
-        // Validaciones
-        if (description == null || description.isEmpty()) {
-            throw new InvalidProductDataException("Los datos son inválidos o incompletos");
-        }
-        if (price == null || price <= 0) {
-            throw new InvalidPriceException("Precio invalido");
-        }
 
-        // Obtener la categoría
-        Category category = categoryRepository.findByCategoryType(categoryType)
-                .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
-                List<Product> createdProducts = new ArrayList<>();
-
-                // Inicializamos la imagen como null
-        Image image = null;
-        if (imageId != null) {
-            try {
-                image = imageService.viewById(imageId);
-            } catch (RuntimeException e) {
-                System.out.println("Imagen no encontrada, se procederá sin imagen.");
-            }
-        }
-    // Crear un producto por cada talla y stock proporcionado
-    for (Map.Entry<Size, Integer> entry : sizeStockMap.entrySet()) {
-        Size size = entry.getKey();
-        Integer stock = entry.getValue();
-
-        if (stock == null || stock < 0) {
-            throw new InsufficientStockException();
-        }
-
-        // Crear el producto con la imagen asociada
-        Product product = Product.builder()
-                .description(description)
-                .model(model)
-                .genre(genre)
-                .image(image) // Asociar la imagen al producto
-                .price(price)
-                .stock(stock)
-                .category(category)
-                .brand(brand)
-                .size(size)
-                .build();
-
-        createdProducts.add(productRepository.save(product));
-    }
-
-    return createdProducts;
-}
-
-    
 
     @Override
     public List<Product> findByCategoryType(CategoryType categoryType) {
@@ -131,7 +76,6 @@ public List<Product> createProduct(String description, String model, String genr
         return productRepository.findByCategory(category);
     }
 
-    
     @Override
     public Product updateProductSize(String model, Size size, Integer stock) 
             throws InsufficientStockException {
@@ -182,6 +126,48 @@ public List<Product> createProduct(String description, String model, String genr
 
     public Optional<Product> getProductByModelAndSize(String model, Size size) {
         return productRepository.findByModelAndSize(model, size);
+    }
+
+    @Override
+    public List<Product> createProduct(String description, String model, String genre, java.sql.Blob image,
+            Double price, Map<Size, Integer> sizeStockMap, CategoryType categoryType, Brand brand)
+            throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
+                if (description == null || description.isEmpty()) {
+                    throw new InvalidProductDataException("Los datos son inválidos o incompletos");
+                }
+                if (price == null || price <= 0) {
+                    throw new InvalidPriceException("Precio invalido");
+                }
+            
+                Category category = categoryRepository.findByCategoryType(categoryType)
+                        .orElseThrow(() -> new RuntimeException("Categoria no encontrada"));
+            
+                List<Product> createdProducts = new ArrayList<>();
+            
+                // Crear un producto por cada talle y stock proporcionado
+                for (Map.Entry<Size, Integer> entry : sizeStockMap.entrySet()) {
+                    Size size = entry.getKey();
+                    Integer stock = entry.getValue();
+            
+                    if (stock == null || stock < 0) {
+                        throw new InsufficientStockException();
+                    }
+            
+                    Product product = Product.builder()
+                            .description(description)
+                            .model(model)
+                            .genre(genre)
+                            .price(price)
+                            .stock(stock)
+                            .category(category)
+                            .brand(brand)
+                            .size(size)
+                            .build();
+            
+                    createdProducts.add(productRepository.save(product));
+                }
+            
+                return createdProducts;
     }
 }
 

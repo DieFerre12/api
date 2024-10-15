@@ -14,7 +14,7 @@ public class ProductRequest {
     private String genre;
     private Long imageId;
     private Brand brand;
-    private Map<Size, Integer> size;  // Mapa de tallas y stock
+    private Map<Size, Integer> sizeStockMap;  // Mapa de tallas y stock
     private Double price;
     private CategoryType categoryType;
 }

@@ -66,44 +66,22 @@ public class ProductController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<List<Product>> createProduct(@RequestBody ProductRequest productRequest) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
-        List<Product> createdProducts = productService.createProduct(
-                productRequest.getDescription(),
-                productRequest.getModel(),
-                productRequest.getGenre(),
-                productRequest.getImageId(),
-                productRequest.getPrice(),
-                productRequest.getSize(),
-                productRequest.getCategoryType(),
-                productRequest.getBrand()
-        );
-    
-        return ResponseEntity.ok(createdProducts);
-    }
-    
-    @PutMapping("/updateProductSize")
-    public ResponseEntity<List<Product>> updateProductSize(@RequestBody ProductRequest productRequest) {
-        List<Product> updatedProducts = new ArrayList<>();
-        try {
-            for (Map.Entry<Size, Integer> entry : productRequest.getSize().entrySet()) {
-                Size size = entry.getKey();
-                Integer stock = entry.getValue();
-                
-                // Llama al método updateProductSize para cada talla
-                Product updatedProductSize = productService.updateProductSize(
-                        productRequest.getModel(),
-                        size,
-                        stock
-                );
-                updatedProducts.add(updatedProductSize);
-            }
-            return ResponseEntity.ok(updatedProducts);
-        } catch (InsufficientStockException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-    }
+public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productRequest)
+        throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
+
+    List<Product> result = productService.createProduct(
+            productRequest.getDescription(),
+            productRequest.getModel(),
+            productRequest.getGenre(),
+            null,  // No se está pasando la imagen
+            productRequest.getPrice(),
+            productRequest.getSizeStockMap(),  // Pasar el mapa de tallas y stocks
+            productRequest.getCategoryType(),
+            productRequest.getBrand());
+
+    return ResponseEntity.created(URI.create("/products/" + result.get(0).getId())).body(result);
+}
+
 
 
         @PutMapping("/updateProductPrice") // CAMBIA PRECIO DE PRODUCTO
