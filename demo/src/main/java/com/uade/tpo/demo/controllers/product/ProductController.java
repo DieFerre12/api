@@ -49,12 +49,18 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProducts(PageRequest.of(page, size)));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        return productService.getProductById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/{model}")
+    public ResponseEntity<List<Product>> getProductsByModel(@PathVariable String model) {
+        List<Product> products = productRepository.findByModel(model);
+    
+        if (products.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+    
+        return ResponseEntity.ok(products);
     }
+    
+
     @DeleteMapping("/{model}")
     public ResponseEntity<String> deleteProduct(@PathVariable String model) {
         try {
