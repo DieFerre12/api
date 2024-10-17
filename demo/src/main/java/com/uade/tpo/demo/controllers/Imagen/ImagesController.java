@@ -6,13 +6,16 @@ import com.uade.tpo.demo.entity.Image;
 import com.uade.tpo.demo.service.images.ImageService;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.Base64;
 
-import javax.sql.rowset.serial.SerialException;
+import javax.sql.rowset.serial.SerialBlob;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;  // Cambié a org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType;   // Import correcto para MediaType
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,34 +26,38 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RestController
 @RequestMapping("/images")
 public class ImagesController {
+
     @Autowired
     private ImageService imageService;
-
     @CrossOrigin
     @GetMapping("/{id}")
-    public ResponseEntity<ImageResponse> displayImage(@PathVariable("id") long id) throws IOException, SQLException {
-        Image image = imageService.viewById(id);
-        String encodedString = Base64.getEncoder()
-                .encodeToString(image.getImage().getBytes(1, (int) image.getImage().length()));
-        return ResponseEntity.ok().body(ImageResponse.builder().file(encodedString).id(id).build());
-    }
+    public ResponseEntity<InputStreamResource> getImage(@PathVariable("id") long id) {
+        Image image = imageService.viewById(id); 
 
-    @GetMapping("/search/{name}")
-    public ResponseEntity<ImageResponse> findImageByName(@PathVariable("name") String name) {
-        Image image = imageService.findByName(name); // Asegúrate de que este método esté implementado
-        if (image == null) {
-            return ResponseEntity.notFound().build(); // Devuelve 404 si no se encuentra la imagen
+        if (image != null && image.getImage() != null) {
+            try {
+                InputStream imageStream = image.getImage().getBinaryStream(); 
+                InputStreamResource resource = new InputStreamResource(imageStream);
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + image.getName() + "\"")
+                        .contentType(MediaType.IMAGE_JPEG)  // Cambia esto según el tipo de imagen (JPEG, PNG, etc.)
+                        .body(resource);
+            } catch (SQLException e) {
+                e.printStackTrace(); 
+            }
         }
-        // Utiliza el método para obtener la imagen en Base64
-        String encodedImage = image.getImageAsBase64(); // Obtiene la imagen en formato Base64
-        return ResponseEntity.ok().body(ImageResponse.builder().file(encodedImage).id(image.getId()).build());
+        return ResponseEntity.notFound().build(); 
     }
 
     @PostMapping("/add")
-    public String addImagePost(AddFileRequest request) throws IOException, SerialException, SQLException {
-        byte[] bytes = request.getFile().getBytes();
-        Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-        imageService.create(Image.builder().image(blob).build());
-        return "created";
+    public String addImagePost(AddFileRequest request) throws IOException, SQLException {
+        byte[] bytes = request.getFile().getBytes();  
+        Blob blob = new SerialBlob(bytes);            
+        imageService.create(Image.builder()
+                .image(blob)                         
+                .name(request.getFile().getOriginalFilename()) 
+                .build());
+
+        return "Imagen creada correctamente";
     }
 }
