@@ -21,7 +21,7 @@ public class ImageServiceImpl implements ImageService {
     public Image viewById(long id) {
         return imageRepository.findById(id).orElse(null);
     }
-    public Image findByName(String name) {
-        return imageRepository.findByName(name);  // Implementación correcta del método
+    public Image findByModel(String model) {
+        return imageRepository.findByModel(model);  // Implementación correcta del método
     }
 }

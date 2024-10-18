@@ -7,7 +7,7 @@ import com.uade.tpo.demo.entity.Image;
 
 @Repository
 public interface ImageRepository extends JpaRepository<Image, Long> {
-    Image findByName(String name); 
+    Image findByModel(String model); 
 }
 
 
