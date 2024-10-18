@@ -49,6 +49,25 @@ public class ImagesController {
         return ResponseEntity.notFound().build(); 
     }
 
+    @GetMapping("/search/{name}")
+    public ResponseEntity<InputStreamResource> findImageByName(@PathVariable("name") String name) {
+        Image image = imageService.findByName(name);
+        
+        if (image != null && image.getImage() != null) {
+            try {
+                InputStream imageStream = image.getImage().getBinaryStream(); 
+                InputStreamResource resource = new InputStreamResource(imageStream);
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + image.getName() + "\"")
+                        .contentType(MediaType.IMAGE_JPEG) 
+                        .body(resource);
+            } catch (SQLException e) {
+                e.printStackTrace(); 
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @PostMapping("/add")
     public String addImagePost(AddFileRequest request) throws IOException, SQLException {
         byte[] bytes = request.getFile().getBytes();  
