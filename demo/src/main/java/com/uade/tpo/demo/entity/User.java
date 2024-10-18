@@ -49,7 +49,7 @@ public class User implements UserDetails {
     private List<Order> orders;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Role role;
 
     @Override

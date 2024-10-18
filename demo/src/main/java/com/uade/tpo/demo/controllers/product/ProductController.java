@@ -40,6 +40,9 @@ public class ProductController {
 
     @Autowired
     private ProductRepository productRepository;
+
+
+
     @GetMapping
     public ResponseEntity<Page<Product>> getProducts(
             @RequestParam(required = false) Integer page,
@@ -48,6 +51,8 @@ public class ProductController {
             return ResponseEntity.ok(productService.getProducts(PageRequest.of(0, Integer.MAX_VALUE)));
         return ResponseEntity.ok(productService.getProducts(PageRequest.of(page, size)));
     }
+
+
 
     @GetMapping("/{model}")
     public ResponseEntity<List<Product>> getProductsByModel(@PathVariable String model) {
