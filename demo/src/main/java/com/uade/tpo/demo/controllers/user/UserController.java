@@ -1,6 +1,8 @@
 package com.uade.tpo.demo.controllers.user;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.uade.tpo.demo.entity.User;
 import com.uade.tpo.demo.service.shoppingCart.ShoppingCartService;
 import com.uade.tpo.demo.service.user.UserService;
+
 
 @CrossOrigin(origins = "http://localhost:5173") 
 @RestController
@@ -47,11 +50,13 @@ public class UserController {
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        Optional<User> user = userService.getUserById(id);
-        return user.map(ResponseEntity::ok)
-                   .orElseGet(() -> ResponseEntity.notFound().build());
+    @GetMapping("/all")
+    public ResponseEntity<List<UserResponse>> getUsers() {
+        List<User> users = userService.getUsers();
+        List<UserResponse> userResponses = users.stream()
+                                      .map(user -> new UserResponse(user.getId(), user.getEmail(), user.getFirstName(), user.getLastName()))
+                                      .collect(Collectors.toList());
+        return ResponseEntity.ok(userResponses);
     }
 
     @GetMapping("/email")

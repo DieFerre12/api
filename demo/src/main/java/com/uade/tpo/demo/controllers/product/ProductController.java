@@ -115,7 +115,6 @@ public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productR
             // Actualizar el precio de cada producto encontrado
             products.forEach(product -> {
                 product.setPrice(productRequest.getPrice());
-                productRepository.save(product);
             });
 
             return ResponseEntity.ok(products.get(0));

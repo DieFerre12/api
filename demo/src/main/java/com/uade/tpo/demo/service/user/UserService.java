@@ -1,6 +1,8 @@
 package com.uade.tpo.demo.service.user;
 
 import com.uade.tpo.demo.entity.User;
+
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -13,4 +15,6 @@ public interface UserService {
     public User updateUser(Long id, User userDetails);
     
     public User saveUser(String id,String email, String name, String password, String firstName);
+
+    public List<User> getUsers();
 }

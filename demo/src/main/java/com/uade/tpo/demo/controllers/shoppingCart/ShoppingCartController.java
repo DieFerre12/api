@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import com.uade.tpo.demo.entity.Size;
 import com.uade.tpo.demo.service.product.ProductService;
 import com.uade.tpo.demo.service.shoppingCart.ShoppingCartService;
 
+@CrossOrigin(origins = "http://localhost:5173") 
 @RestController
 @RequestMapping("/shoppingCart")
 public class ShoppingCartController {
@@ -46,7 +48,7 @@ public ResponseEntity<?> getCartByUserId(@PathVariable Long userId) {
     if (cart.isPresent()) {
         ShoppingCart shoppingCart = cart.get();
 
-        UserResponse userResponse = new UserResponse(shoppingCart.getUser().getEmail(), shoppingCart.getUser().getFirstName(), shoppingCart.getUser().getLastName());
+        UserResponse userResponse = new UserResponse(userId, shoppingCart.getUser().getEmail(), shoppingCart.getUser().getFirstName(), shoppingCart.getUser().getLastName());
 
         ShoppingCartRequest shoppingCartRequest = ShoppingCartRequest.builder()
             .id(shoppingCart.getId())
@@ -99,7 +101,7 @@ public ResponseEntity<?> addProductToCart(
     ShoppingCartRequest response = new ShoppingCartRequest();
     response.setId(cart.getId());
     response.setTotalPrice(cart.getTotalPrice());
-    response.setUserResponse(new UserResponse(cart.getUser().getEmail(), cart.getUser().getFirstName(), cart.getUser().getLastName()));
+    response.setUserResponse(new UserResponse(userId, cart.getUser().getEmail(), cart.getUser().getFirstName(), cart.getUser().getLastName()));
 
     List<ShoppingCartRequest.ProductRequest> productResponses = cart.getItems().stream()
     .map(item -> new ShoppingCartRequest.ProductRequest(
@@ -145,7 +147,7 @@ public ResponseEntity<?> updateProductInCart(
     ShoppingCartRequest response = ShoppingCartRequest.builder()
         .id(cart.getId())
         .totalPrice(cart.getTotalPrice())
-        .userResponse(new UserResponse(cart.getUser().getEmail(), cart.getUser().getFirstName(), cart.getUser().getLastName()))
+        .userResponse(new UserResponse(userId, cart.getUser().getEmail(), cart.getUser().getFirstName(), cart.getUser().getLastName()))
         .products(cart.getItems().stream()
             .map(item -> new ShoppingCartRequest.ProductRequest(
                 item.getSize(), 
