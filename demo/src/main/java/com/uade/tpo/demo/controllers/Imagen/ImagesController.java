@@ -39,7 +39,7 @@ public class ImagesController {
                 InputStream imageStream = image.getImage().getBinaryStream(); 
                 InputStreamResource resource = new InputStreamResource(imageStream);
                 return ResponseEntity.ok()
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + image.getName() + "\"")
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + image.getModel() + "\"")
                         .contentType(MediaType.IMAGE_JPEG)  // Cambia esto según el tipo de imagen (JPEG, PNG, etc.)
                         .body(resource);
             } catch (SQLException e) {
@@ -49,15 +49,34 @@ public class ImagesController {
         return ResponseEntity.notFound().build(); 
     }
 
-    @PostMapping("/add")
-    public String addImagePost(AddFileRequest request) throws IOException, SQLException {
-        byte[] bytes = request.getFile().getBytes();  
-        Blob blob = new SerialBlob(bytes);            
-        imageService.create(Image.builder()
-                .image(blob)                         
-                .name(request.getFile().getOriginalFilename()) 
-                .build());
-
-        return "Imagen creada correctamente";
+    @GetMapping("/search/{model}")
+    public ResponseEntity<InputStreamResource> findImageByName(@PathVariable("model") String model) {
+        Image image = imageService.findByModel(model);
+        
+        if (image != null && image.getImage() != null) {
+            try {
+                InputStream imageStream = image.getImage().getBinaryStream(); 
+                InputStreamResource resource = new InputStreamResource(imageStream);
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + image.getModel() + "\"")
+                        .contentType(MediaType.IMAGE_JPEG) 
+                        .body(resource);
+            } catch (SQLException e) {
+                e.printStackTrace(); 
+            }
+        }
+        return ResponseEntity.notFound().build();
     }
+
+    @PostMapping("/add/{model}")    
+    public String addImagePost(AddFileRequest request, @PathVariable ("model") String model) throws IOException, SQLException {        
+        byte[] bytes = request.getFile().getBytes();          
+        Blob blob = new SerialBlob(bytes);                    
+        imageService.create(Image.builder()                
+            .image(blob)                                                          
+            .model(model)               
+            .build());        
+        return "Imagen creada correctamente para el modelo: " + model; // Incluimos el modelo en la respuesta
+    }
+    
 }

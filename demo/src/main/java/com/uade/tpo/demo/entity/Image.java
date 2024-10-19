@@ -21,5 +21,5 @@ public class Image {
 
     private Blob image;
 
-    private String name;
+    private String model;
 }

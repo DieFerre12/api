@@ -11,5 +11,5 @@ public interface ImageService {
 
     public Image viewById(long id);
 
-    public Image findByName(String name);
+    public Image findByModel(String model);
 }
