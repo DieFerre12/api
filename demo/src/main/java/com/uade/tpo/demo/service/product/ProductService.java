@@ -27,7 +27,7 @@ public interface ProductService {
     
     public List<Product> updateProductPrice(String model, Double price) throws InvalidPriceException;
 
-    public List<Product> createProduct(String description, String model, String genre, Blob image, Double price,
+    public List<Product> createProduct(String description, String model, String genre, Double price,
     Map<Size, Integer> sizeStockMap, CategoryType categoryType, Brand brand) throws InvalidProductDataException, InvalidPriceException, InsufficientStockException;
 
     public List<Product> findByCategoryType(CategoryType categoryType);
@@ -37,6 +37,9 @@ public interface ProductService {
     public Optional<Product> getProductByModelAndSize(String model, Size size);
 
     public List<Product> findByBrand(Brand brand);
+    
+    public List<Product> getProductByModelWithImage(String model);
+
 
 }
 

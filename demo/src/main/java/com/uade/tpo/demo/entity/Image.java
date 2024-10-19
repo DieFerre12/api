@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Blob;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Data
 @Entity
 @Builder
@@ -19,6 +21,7 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     private Blob image;
 
     private String model;

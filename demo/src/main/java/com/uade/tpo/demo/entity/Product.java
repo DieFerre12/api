@@ -28,14 +28,14 @@ public class Product {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = false, insertable = false, updatable = false)
     private String model;
 
     @Column(nullable = false)
     private String genre;
 
     @ManyToOne
-    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    @JoinColumn(name = "model", referencedColumnName = "model", insertable = false, updatable = false)
     private Image image;
 
     @Enumerated(EnumType.STRING)
@@ -55,4 +55,8 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "categoryType", referencedColumnName = "id", nullable = false)
     private Category category;
+
+    public Long getImageId() {
+        return image != null ? image.getId() : null;
+    }
 }
