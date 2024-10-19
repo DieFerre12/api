@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.uade.tpo.demo.entity.Brand;
 import com.uade.tpo.demo.entity.Category.CategoryType;
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.entity.Size;
@@ -123,9 +125,15 @@ public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productR
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-
-
+    
+    @GetMapping("/brand/{brand}")
+public ResponseEntity<List<Product>> getProductsByBrand(@PathVariable Brand brand) {
+    List<Product> products = productService.findByBrand(brand);
+    if (products.isEmpty()) {
+        return ResponseEntity.noContent().build();
+    }
+    return ResponseEntity.ok(products);
+}
 
     @GetMapping("/category/{categoryType}")
     public ResponseEntity<List<Product>> getProductsByCategoryType(@PathVariable CategoryType categoryType) {

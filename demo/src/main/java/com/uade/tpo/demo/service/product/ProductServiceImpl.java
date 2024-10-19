@@ -47,6 +47,11 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(productId);
     }
 
+    @Override
+public List<Product> findByBrand(Brand brand) {
+    return productRepository.findByBrand(brand);
+}
+
     public void deleteProduct(String model) {
         List<Product> products = productRepository.findByModel(model);
         if (products.isEmpty()) {
