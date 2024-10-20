@@ -124,9 +124,6 @@ public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productR
         }
     }
 
-
-
-
     @GetMapping("/category/{categoryType}")
     public ResponseEntity<List<Product>> getProductsByCategoryType(@PathVariable CategoryType categoryType) {
         List<Product> products = productService.findByCategoryType(categoryType);
@@ -136,5 +133,5 @@ public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productR
         return ResponseEntity.ok(products);
     }
 
-
+    
 }

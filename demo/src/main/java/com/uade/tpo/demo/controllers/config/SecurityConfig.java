@@ -30,6 +30,7 @@ public class SecurityConfig {
                 http
                                 .csrf(AbstractHttpConfigurer::disable)
                                                 .authorizeHttpRequests(req -> req
+                                                .requestMatchers(HttpMethod.GET,"/images/{model}").permitAll()
                                                 .requestMatchers("/api/v1/auth/authenticate").permitAll()
                                                 .requestMatchers("/api/v1/auth/register").permitAll()
                                                 .requestMatchers("/admin/").hasRole("ADMIN")
