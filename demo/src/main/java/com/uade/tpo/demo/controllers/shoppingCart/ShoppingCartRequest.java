@@ -3,7 +3,7 @@ package com.uade.tpo.demo.controllers.shoppingCart;
 import java.util.List;
 
 import com.uade.tpo.demo.controllers.user.UserResponse;
-import com.uade.tpo.demo.entity.CartItem;
+import com.uade.tpo.demo.entity.Size;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +24,7 @@ public class ShoppingCartRequest {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ProductRequest {
-        private Long id;
+        private Size size;
         private String model;
         private double price;
         private int quantity;  

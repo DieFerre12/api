@@ -1,7 +1,5 @@
 package com.uade.tpo.demo.entity;
 
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,8 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,8 +34,9 @@ public class Product {
     @Column
     private String genre;
 
-    @Column
-    private String image;
+    @ManyToOne
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private Image image;
 
     @Enumerated(EnumType.STRING)
     private Brand brand;
@@ -56,6 +53,4 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "categoryType", referencedColumnName = "id")
     private Category category;
-
-   
 }

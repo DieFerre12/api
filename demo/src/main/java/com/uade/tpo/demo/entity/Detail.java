@@ -1,5 +1,8 @@
 package com.uade.tpo.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,11 +25,6 @@ public class Detail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
-    private Long id_order;
-    @Column
-    private Long id_product;
     @Column
     private Integer quantity;
     @Column
@@ -35,19 +33,16 @@ public class Detail {
     private int amount;
 
 
-
-    // Relación con la entidad `Order`
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
+    @JsonBackReference
     private Order order;
 
-    // Relación con la entidad `Product`
+    
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @JsonManagedReference
     private Product product;
 
-    // Relación con la entidad `Facture`
-    @ManyToOne
-    @JoinColumn(name = "facture_id", referencedColumnName = "id")
-    private Facture facture;
+    
 }

@@ -1,7 +1,5 @@
 package com.uade.tpo.demo.controllers.categories;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,20 +32,28 @@ public class CategoriesController {
             @RequestParam(required = false) Integer size) {
         if (page == null || size == null)
             return ResponseEntity.ok(categoryService.getCategories(PageRequest.of(0, Integer.MAX_VALUE)));
-        return ResponseEntity.ok(categoryService.getCategories(PageRequest.of(page, size)));
+        Page<Category> categoriesPage = categoryService.getCategories(PageRequest.of(page, size));
+    
+        return ResponseEntity.ok(categoriesPage.map(category -> {
+            Category responseCategory = new Category();
+            responseCategory.setId(category.getId());
+            responseCategory.setCategoryType(category.getCategoryType());
+            return responseCategory;
+        }));
     }
+    
 
     @GetMapping("/{categoryId}")
     public ResponseEntity<Object> getCategoryById(@PathVariable Long categoryId) {
         try {
             Category result = categoryService.getCategoryById(categoryId);
-            return ResponseEntity.ok(result.getId());
+            return ResponseEntity.ok(result.getCategoryType());
         } catch (CategoryNotFoundException | CategoryDuplicateException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Categoría no encontrada.");
         }
     }
 
-    @PostMapping
+    @GetMapping("/{categoryType}")
     public ResponseEntity<Object> selectCategory(@RequestBody CategoryType categoryType) {
         try {
             Category result = categoryService.getCategoryByType(categoryType);
@@ -60,7 +66,6 @@ public class CategoriesController {
     @PostMapping("/create")
     public ResponseEntity<Object> createCategory(@RequestBody CategoryRequest categoryRequest)
             throws CategoryDuplicateException {
-        // El servicio lanza CategoryDuplicateException si la categoría ya existe
         Category result = categoryService.createCategory(categoryRequest.getCategoryType());
         return ResponseEntity.ok(result.getId());
     }

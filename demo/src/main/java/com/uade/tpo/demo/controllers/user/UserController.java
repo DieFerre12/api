@@ -39,11 +39,10 @@ public class UserController {
             userRequest.getLastName()
     );
 
-    // Crear carrito de compras vacío para el nuevo usuario
     shoppingCartService.createCart(newUser.getId());
 
     return ResponseEntity.ok(newUser);
-}
+    }
 
 
     @GetMapping("/{id}")

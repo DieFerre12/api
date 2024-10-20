@@ -11,8 +11,6 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.uade.tpo.demo.entity.Role;
-
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -28,20 +26,23 @@ public class SecurityConfig {
                 http
                                 .csrf(AbstractHttpConfigurer::disable)
                                 .authorizeHttpRequests(req -> req
-                                                .requestMatchers("/api/v1/auth/**").permitAll() // Rutas de autenticación
-                                                .requestMatchers("/error/**").permitAll() // Rutas de error
-                                                .requestMatchers("/admin/**").hasRole("ADMIN") // Rutas administrativas solo para ADMIN
-                                                .requestMatchers("/public/**").permitAll() // Rutas públicas
-
-                                                .requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN") // Rutas de usuario
+                                        .requestMatchers("/api/v1/auth/**").permitAll() 
+                                        .requestMatchers("/admin/").hasRole("ADMIN") 
+                                        .requestMatchers("/user/").hasRole("USER") 
+                                        .requestMatchers("/users/").hasRole("ADMIN") 
+                                        .requestMatchers("/order/").hasAnyAuthority("USER", "ADMIN") 
+                                        .requestMatchers(HttpMethod.GET,"/products/").hasAnyAuthority("USER", "ADMIN")
+                                        .requestMatchers("/products/").hasAnyAuthority("ADMIN") 
+                                        .requestMatchers(HttpMethod.GET,"/categories/").hasAnyAuthority("USER", "ADMIN")
+                                        .requestMatchers("/categories/").hasAnyAuthority("ADMIN") 
+                                        .requestMatchers("/ShoppingCart/").hasAnyAuthority("ADMIN")
+                                        .requestMatchers(HttpMethod.GET,"/ShoppingCart/user/**").hasAnyAuthority("USER", "ADMIN")
+                                        .requestMatchers(HttpMethod.DELETE, "/shoppingCart/user/{userId}/removeProduct/{model}/{size}/").hasRole("ADMIN")
+                                        .requestMatchers("/ShoppingCart/user/**").hasAnyAuthority("USER", "ADMIN")
+                                        .requestMatchers(HttpMethod.GET,"/order/**").hasAnyAuthority("ADMIN")
+                                        .requestMatchers("/order/create/").hasAnyAuthority("USER", "ADMIN")
+                                        .requestMatchers("/image/**").hasAnyAuthority("ADMIN")
                                                 
-                                                .requestMatchers("/products/new**").permitAll() 
-
-                                                .requestMatchers("/categories/**").permitAll() // Rutas de categorías para usuarios
-
-                                                .requestMatchers("/ShoppingCart/**").permitAll()
-                                                
-
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                                 .authenticationProvider(authenticationProvider)
@@ -49,4 +50,3 @@ public class SecurityConfig {
                 return http.build();
         }
 }
-// Requiere autorización de ADMIN

@@ -1,7 +1,5 @@
 package com.uade.tpo.demo.service.category;
 
-import java.util.Optional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 

@@ -18,7 +18,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.uade.tpo.demo.entity.CartItem;
 
 @Entity
 @Data
@@ -46,55 +45,11 @@ public class ShoppingCart {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ProductsCart {
-        private long id;
+        private Size size;
+        private String model;
         private int quantity;
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public void addProduct(Product product, int quantity) {
-        CartItem existingItem = items.stream()
-            .filter(item -> item.getProduct().getId().equals(product.getId()))
-            .findFirst()
-            .orElse(null);
-
-        if (existingItem != null) {
-            existingItem.setQuantity(existingItem.getQuantity() + quantity);
-        } else {
-            CartItem newItem = new CartItem();
-            newItem.setProduct(product);
-            newItem.setQuantity(quantity);
-            newItem.setShoppingCart(this);
-            items.add(newItem);
-        }
-
-        updateTotalPrice();
-    }
-
-    public void updateTotalPrice() {
-        this.totalPrice = items.stream()
-            .mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity())
-            .sum();
-    }
+    
 }

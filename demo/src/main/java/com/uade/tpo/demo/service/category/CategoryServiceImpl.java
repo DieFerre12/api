@@ -13,6 +13,8 @@ import com.uade.tpo.demo.exceptions.CategoryDuplicateException;
 import com.uade.tpo.demo.exceptions.CategoryNotFoundException;
 import com.uade.tpo.demo.repository.CategoryRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
@@ -26,27 +28,23 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category getCategoryById(Long categoryId) throws CategoryNotFoundException {
-        // Lanza CategoryNotFoundException si no encuentra la categoría por ID
         return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new CategoryNotFoundException());
+                .orElseThrow(() -> new CategoryNotFoundException("La categoría solicitada no existe"));
     }
 
     @Override
     public Category getCategoryByType(CategoryType categoryType) throws CategoryNotFoundException {
-        // Lanza CategoryNotFoundException si no encuentra la categoría por tipo
         return categoryRepository.findByCategoryType(categoryType)
-                .orElseThrow(() -> new CategoryNotFoundException());
+                .orElseThrow(() -> new CategoryNotFoundException("La categoría solicitada no existe"));
     }
 
     @Override
+    @Transactional
     public Category createCategory(CategoryType categoryType) throws CategoryDuplicateException {
-        // Verifica si la categoría ya existe
         Optional<Category> existingCategory = categoryRepository.findByCategoryType(categoryType);
         if (existingCategory.isPresent()) {
-            // Si la categoría ya existe, lanza CategoryDuplicateException
-            throw new CategoryDuplicateException();
+            throw new CategoryDuplicateException("La categoria esta duplicada");
         }
-        // Si no existe, crea la nueva categoría
         Category newCategory = new Category();
         newCategory.setCategoryType(categoryType);
         return categoryRepository.save(newCategory);
