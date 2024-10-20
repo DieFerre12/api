@@ -2,6 +2,7 @@ package com.uade.tpo.demo.repository;
 
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.entity.Size;
+import com.uade.tpo.demo.entity.Brand;
 import com.uade.tpo.demo.entity.Category;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByModel(String model);
 
     Optional<Product> findByModelAndSizeAndCategory(String model, Size size, Category category);
+
+    List<Product> findByBrand(Brand brand);
 
     
 

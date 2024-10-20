@@ -1,7 +1,6 @@
 package com.uade.tpo.demo.controllers.product;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,22 +14,22 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.uade.tpo.demo.entity.Brand;
 import com.uade.tpo.demo.entity.Category.CategoryType;
 import com.uade.tpo.demo.entity.Product;
-import com.uade.tpo.demo.entity.Size;
 import com.uade.tpo.demo.exceptions.InsufficientStockException;
 import com.uade.tpo.demo.exceptions.InvalidPriceException;
 import com.uade.tpo.demo.exceptions.InvalidProductDataException;
 import com.uade.tpo.demo.repository.ProductRepository;
 import com.uade.tpo.demo.service.product.ProductService;
 
-import org.springframework.web.bind.annotation.PutMapping;
-
-@CrossOrigin(origins = "http://localhost:5173") 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/products")
 public class ProductController {
@@ -41,8 +40,6 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
-
-
     @GetMapping
     public ResponseEntity<Page<Product>> getProducts(
             @RequestParam(required = false) Integer page,
@@ -52,19 +49,16 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProducts(PageRequest.of(page, size)));
     }
 
-
-
     @GetMapping("/{model}")
     public ResponseEntity<List<Product>> getProductsByModel(@PathVariable String model) {
-        List<Product> products = productRepository.findByModel(model);
-    
+        List<Product> products = productService.getProductByModelWithImage(model);
+
         if (products.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-    
+
         return ResponseEntity.ok(products);
     }
-    
 
     @DeleteMapping("/{model}")
     public ResponseEntity<String> deleteProduct(@PathVariable String model) {
@@ -77,25 +71,22 @@ public class ProductController {
     }
 
     @PostMapping("/new")
-public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productRequest)
-        throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
+    public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productRequest)
+            throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
 
-    List<Product> result = productService.createProduct(
-            productRequest.getDescription(),
-            productRequest.getModel(),
-            productRequest.getGenre(),
-            null,  // No se está pasando la imagen
-            productRequest.getPrice(),
-            productRequest.getSizeStockMap(),  // Pasar el mapa de tallas y stocks
-            productRequest.getCategoryType(),
-            productRequest.getBrand());
+        List<Product> result = productService.createProduct(
+                productRequest.getDescription(),
+                productRequest.getModel(),
+                productRequest.getGenre(),
+                productRequest.getPrice(),
+                productRequest.getSizeStockMap(),  // Pasar el mapa de tallas y stocks
+                productRequest.getCategoryType(),
+                productRequest.getBrand());
 
-    return ResponseEntity.created(URI.create("/products/" + result.get(0).getId())).body(result);
-}
+        return ResponseEntity.created(URI.create("/products/" + result.get(0).getId())).body(result);
+    }
 
-
-
-        @PutMapping("/updateProductPrice") // CAMBIA PRECIO DE PRODUCTO
+    @PutMapping("/updateProductPrice") // CAMBIA PRECIO DE PRODUCTO
     public ResponseEntity<?> updateProductPrice(@RequestBody ProductRequest productRequest) {
         try {
             // Validar que el precio sea válido
@@ -124,6 +115,9 @@ public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productR
         }
     }
 
+
+
+
     @GetMapping("/category/{categoryType}")
     public ResponseEntity<List<Product>> getProductsByCategoryType(@PathVariable CategoryType categoryType) {
         List<Product> products = productService.findByCategoryType(categoryType);
@@ -133,5 +127,5 @@ public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productR
         return ResponseEntity.ok(products);
     }
 
-    
+
 }

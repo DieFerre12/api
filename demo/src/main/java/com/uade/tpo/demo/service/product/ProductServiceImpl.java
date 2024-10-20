@@ -47,6 +47,11 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(productId);
     }
 
+    @Override
+public List<Product> findByBrand(Brand brand) {
+    return productRepository.findByBrand(brand);
+}
+
     public void deleteProduct(String model) {
         List<Product> products = productRepository.findByModel(model);
         if (products.isEmpty()) {
@@ -129,7 +134,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> createProduct(String description, String model, String genre, java.sql.Blob image,
+    public List<Product> getProductByModelWithImage(String model) {
+        List<Product> products = productRepository.findByModel(model);
+        if (products.isEmpty()) {
+            throw new RuntimeException("Producto no encontrado");
+        }
+        return products;
+    }
+
+    @Override
+    public List<Product> createProduct(String description, String model, String genre,
             Double price, Map<Size, Integer> sizeStockMap, CategoryType categoryType, Brand brand)
             throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
                 if (description == null || description.isEmpty()) {
