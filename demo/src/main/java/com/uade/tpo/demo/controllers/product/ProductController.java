@@ -1,6 +1,7 @@
 package com.uade.tpo.demo.controllers.product;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.uade.tpo.demo.entity.Brand;
 import com.uade.tpo.demo.entity.Category.CategoryType;
 import com.uade.tpo.demo.entity.Product;
+import com.uade.tpo.demo.entity.Size;
 import com.uade.tpo.demo.exceptions.InsufficientStockException;
 import com.uade.tpo.demo.exceptions.InvalidPriceException;
 import com.uade.tpo.demo.exceptions.InvalidProductDataException;
@@ -115,7 +117,30 @@ public class ProductController {
         }
     }
 
-
+        
+    @PutMapping("/updateProductSize")
+    public ResponseEntity<List<Product>> updateProductSize(@RequestBody ProductRequest productRequest) {
+        List<Product> updatedProducts = new ArrayList<>();
+        try {
+            for (Map.Entry<Size, Integer> entry : productRequest.getSizeStockMap().entrySet()) {
+                Size size = entry.getKey();
+                Integer stock = entry.getValue();
+                
+                // Llama al método updateProductSize para cada talla
+                Product updatedProductSize = productService.updateProductSize(
+                        productRequest.getModel(),
+                        size,
+                        stock
+                );
+                updatedProducts.add(updatedProductSize);
+            }
+            return ResponseEntity.ok(updatedProducts);
+        } catch (InsufficientStockException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 
 
     @GetMapping("/category/{categoryType}")

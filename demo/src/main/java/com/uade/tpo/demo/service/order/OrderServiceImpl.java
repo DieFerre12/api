@@ -53,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
         // Asegúrate de tener un método para actualizar el carrito
 
         return buildOrderResponse(order);
-        }
+    }
 
     @Override
     public Order getOrderById(Long orderId) {
@@ -65,10 +65,12 @@ public class OrderServiceImpl implements OrderService {
     public double calculateTotal(double baseAmount, String paymentMethod) {
         double total = baseAmount;
         switch (paymentMethod.toLowerCase()) {
-            case CREDIT_CARD -> total += baseAmount * 0.10;
-            case DEBIT_CARD, MERCADO_PAGO -> {
+            case CREDIT_CARD -> total += baseAmount * 0.10; // 10% recargo
+            case DEBIT_CARD -> total -= baseAmount * 0.05; // 5% descuento
+            case MERCADO_PAGO -> total -= baseAmount * 0.10; // 10% descuento
+            case CASH -> {
+                // No hay descuento ni recargo
             }
-            case CASH -> total -= baseAmount * 0.10;
         }
         return total;
     }
@@ -83,12 +85,12 @@ public class OrderServiceImpl implements OrderService {
         return shoppingCartService.getCartByUserId(id)
                 .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado para el usuario ID: " + id));
     }
-    
+
     private Order buildOrder(ShoppingCart cart, String paymentMethod, String orderDate) {
         Order order = new Order();
         order.setUser(cart.getUser());
         order.setPaymentMethod(paymentMethod);
-        
+    
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date parsedDate = dateFormat.parse(orderDate);
@@ -108,28 +110,35 @@ public class OrderServiceImpl implements OrderService {
             return detail;
         }).toList());
     
-        // Asignar un descuento si corresponde (ejemplo: 10% si pago en efectivo)
-        if (paymentMethod.equalsIgnoreCase(CASH)) {
-            order.setDiscount(order.getTotalPrice() * 0.10);
+        // Calcular el total de la orden
+        double baseTotal = cart.getTotalPrice();
+        double finalTotal = calculateTotal(baseTotal, paymentMethod);
+        order.setTotalPrice(finalTotal);
+    
+        // Asignar un descuento si corresponde
+        if (paymentMethod.equalsIgnoreCase(MERCADO_PAGO)) {
+            order.setDiscount(baseTotal * 0.10); // 10% descuento
+        } else if (paymentMethod.equalsIgnoreCase(DEBIT_CARD)) {
+            order.setDiscount(baseTotal * 0.05); // 5% descuento
+        } else if (paymentMethod.equalsIgnoreCase(CASH)) {
+            order.setDiscount(0.0); // No hay descuento
         } else {
             order.setDiscount(0.0); // No hay descuento
         }
     
-        return order;
-    }
-    
+        return order;}
 
     private OrderResponse buildOrderResponse(Order order) {
         OrderResponse response = new OrderResponse();
-        
+
         response.setOrderId(order.getId());
         response.setOrderDate(new SimpleDateFormat("yyyy-MM-dd").format(order.getOrderDate()));
         response.setPaymentMethod(order.getPaymentMethod());
         response.setUserName(order.getUser().getFirstName() + " " + order.getUser().getEmail());
-        
+
         // Asignar el descuento de la orden a la respuesta
         response.setDiscount(order.getDiscount());
-    
+
         // Construir detalles de productos
         List<OrderResponse.ProductDetail> productDetails = order.getDetails().stream()
                 .map(detail -> {
@@ -140,19 +149,15 @@ public class OrderServiceImpl implements OrderService {
                     return productDetail;
                 })
                 .toList();
-        
+
         response.setProducts(productDetails);
         response.setTotalPrice(order.getTotalPrice());
-        
+
         return response;
     }
-    
 
     @Override
     public void deleteAllOrders() {
-      orderRepository.deleteAll();
+        orderRepository.deleteAll();
     }
-    
-    
-    
 }

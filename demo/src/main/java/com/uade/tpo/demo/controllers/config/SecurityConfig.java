@@ -47,7 +47,7 @@ public class SecurityConfig {
                                                 .requestMatchers(HttpMethod.DELETE, "/shoppingCart/user/{userId}/removeProduct/{model}/{size}").hasAnyAuthority("ADMIN", "USER")
                                                 .requestMatchers(HttpMethod.DELETE, "/shoppingCart/user/{userId}/clearCart").hasAnyAuthority("ADMIN", "USER")
                                                 .requestMatchers("/shoppingCart/getAll").hasAnyAuthority("ADMIN")
-                                                .requestMatchers(HttpMethod.GET, "/order/**").hasAnyAuthority("ADMIN")
+                                                .requestMatchers(HttpMethod.GET, "/order/**").permitAll()
                                                 .requestMatchers(HttpMethod.POST,"/order/create").hasAnyAuthority("USER", "ADMIN")
                                                 .requestMatchers("/image/**").hasAnyAuthority("ADMIN")
                                                 .anyRequest().authenticated())
