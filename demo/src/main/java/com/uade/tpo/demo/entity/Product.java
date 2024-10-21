@@ -28,8 +28,8 @@ public class Product {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false, insertable = false, updatable = false)
-    private String model;
+    @Column(nullable = false)
+    private String model; // Asegúrate de que este campo esté definido
 
     @Column(nullable = false)
     private String genre;
