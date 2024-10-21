@@ -73,20 +73,22 @@ public class ProductController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productRequest)
-            throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
+public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productRequest)
+        throws InvalidProductDataException, InvalidPriceException, InsufficientStockException {
 
-        List<Product> result = productService.createProduct(
-                productRequest.getDescription(),
-                productRequest.getModel(),
-                productRequest.getGenre(),
-                productRequest.getPrice(),
-                productRequest.getSizeStockMap(),  // Pasar el mapa de tallas y stocks
-                productRequest.getCategoryType(),
-                productRequest.getBrand());
+    System.out.println("Recibido productRequest: " + productRequest); // Línea de depuración
 
-        return ResponseEntity.created(URI.create("/products/" + result.get(0).getId())).body(result);
-    }
+    List<Product> result = productService.createProduct(
+            productRequest.getDescription(),
+            productRequest.getModel(),
+            productRequest.getGenre(),
+            productRequest.getPrice(),
+            productRequest.getSizeStockMap(),  // Pasar el mapa de tallas y stocks
+            productRequest.getCategoryType(),
+            productRequest.getBrand());
+
+    return ResponseEntity.created(URI.create("/products/" + result.get(0).getId())).body(result);
+}
 
     @PutMapping("/updateProductPrice") // CAMBIA PRECIO DE PRODUCTO
     public ResponseEntity<?> updateProductPrice(@RequestBody ProductRequest productRequest) {
