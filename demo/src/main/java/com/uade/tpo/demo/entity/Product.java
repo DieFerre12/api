@@ -28,14 +28,13 @@ public class Product {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false, insertable = false, updatable = false)
+    @Column(nullable = false)
     private String model;
 
     @Column(nullable = false)
     private String genre;
 
     @ManyToOne
-    @JoinColumn(name = "model", referencedColumnName = "model", insertable = false, updatable = false)
     private Image image;
 
     @Enumerated(EnumType.STRING)

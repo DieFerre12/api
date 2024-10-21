@@ -23,6 +23,7 @@ public class Image {
 
     @JsonIgnore
     private Blob image;
-
+    
+    @Column(nullable = false)
     private String model;
 }
