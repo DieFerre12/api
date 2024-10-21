@@ -90,30 +90,14 @@ public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productR
     return ResponseEntity.created(URI.create("/products/" + result.get(0).getId())).body(result);
 }
 
-    @PutMapping("/updateProductPrice") // CAMBIA PRECIO DE PRODUCTO
-    public ResponseEntity<?> updateProductPrice(@RequestBody ProductRequest productRequest) {
+    @PutMapping("/updateProductPrice")
+    public ResponseEntity<Object> updateProductPrice(@RequestBody ProductRequest productRequest) {
         try {
-            // Validar que el precio sea válido
-            if (productRequest.getPrice() == null || productRequest.getPrice() <= 0) {
-                throw new InvalidPriceException("El precio es inválido");
-            }
+            List<Product> updatedProducts = productService.updateProductPrice(
+                    productRequest.getModel(),
+                    productRequest.getPrice());
 
-            // Obtener el modelo del productRequest
-            String model = productRequest.getModel();
-
-            // Buscar productos por modelo
-            List<Product> products = productRepository.findByModel(model);
-            if (products.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado");
-            }
-
-            // Actualizar el precio de cada producto encontrado
-            products.forEach(product -> {
-                product.setPrice(productRequest.getPrice());
-            });
-
-            return ResponseEntity.ok(products.get(0));
-
+            return ResponseEntity.ok(updatedProducts);
         } catch (InvalidPriceException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
