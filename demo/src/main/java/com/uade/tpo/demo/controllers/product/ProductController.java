@@ -138,5 +138,13 @@ public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productR
         return ResponseEntity.ok(products);
     }
 
+    @GetMapping("/brand/{brand}")
+    public ResponseEntity<List<Product>> getProductsByBrand(@PathVariable Brand brand) {
+        List<Product> products = productService.findByBrand(brand);
+        if (products.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(products);
+    }
 
 }
